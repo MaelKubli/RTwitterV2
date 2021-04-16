@@ -162,7 +162,7 @@ data_parser_timeline <- function(results_data){
   ## Select Data form User of Time-line only
   du <- du[du$user_id == dt$user_id[1], ]
   ## Add User Fields to Tweets
-  dt <- merge.data.table(dt,du, by = c("user_id"))
+  dt <- data.table::merge.data.table(dt,du, by = c("user_id"))
   ##################################################################
   # ----- media add-on for dt ----- #
   ##################################################################
@@ -182,7 +182,7 @@ data_parser_timeline <- function(results_data){
     g <- grep("\\_i", names(dm), value = T)
     f <- gsub("\\_i", "", g)
     for(i in 1:length(h)){
-      dt <- merge.data.table(dt,
+      dt <- data.table::merge.data.table(dt,
                              dm,
                              by.x = h[i],
                              by.y = "media_media_key",
@@ -225,7 +225,7 @@ data_parser_timeline <- function(results_data){
     g <- grep("\\_i", names(dp), value = T)
     f <- gsub("\\_i", "", g)
     for(i in 1:length(h)){
-      dt <- merge.data.table(dt,
+      dt <- data.table::merge.data.table(dt,
                              dp,
                              by.x = h[i],
                              by.y = "places_id",
