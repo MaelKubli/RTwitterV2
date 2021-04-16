@@ -33,7 +33,7 @@ query_content <- "#TwitterDev"
 lower <- "2021-01-01T00:00:01Z"
 upper <- "2021-02-01T00:00:01Z"
 
-test <- .full_archive_search(token = Bearer_Token, 
+test <- full_archive_search(token = Bearer_Token, 
                              search_query = query_content, 
                              start_time = lower, 
                              end_time = upper, 
