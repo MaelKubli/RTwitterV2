@@ -1,4 +1,4 @@
-#!/usr/bin/Rscript
+# ' @title: RTweetV2 Function getting a Timeline by one Users ID
 ##################################################################################################
 # Twitter API V2 Endpoint Functions
 ##################################################################################################
@@ -10,19 +10,19 @@
 ##################################################################################################
 # Dependencies
 ##################################################################################################
-library(httr)
-library(httpuv)
-library(RCurl)
-library(ROAuth)
-library(jsonlite)
-library(data.table)
-library(purrr)
-library(lubridate)
-library(readr)
+require(httr)
+require(httpuv)
+require(RCurl)
+require(ROAuth)
+require(jsonlite)
+require(data.table)
+require(purrr)
+require(lubridate)
+require(readr)
 ##################################################################################################
 # Get Timelines of Users by ID (only ID Works at the moment)
 ##################################################################################################
-get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL", user_fields = "ALL", 
+get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL", user_fields = "ALL",
                              expansions = "ALL", place_fields = "ALL", poll_fields = "NONE", n = 100, JSON = FALSE)
 {
   # required packages:
@@ -30,7 +30,7 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
   suppressPackageStartupMessages(require(rjson))
   suppressPackageStartupMessages(require(jsonlite))
   suppressPackageStartupMessages(require(data.table))
-  
+
   # Check if Bearer Token is set:
   if(is.na(token) | nchar(token) != 112){
     stop("Please add the Bearer Token of your projects dashboard!\nget_timelines_v2(token = 'token')\n")
@@ -46,7 +46,7 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
   if(grepl('.\\,', as.character(user_id)) == T){
     stop("Currently this function only works with one ID at a time!\n")
   }
-  
+
   params = list(
     `max_results` = n,
     `tweet.fields` = tweet_fields,
@@ -54,7 +54,7 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
     `expansions` = expansions,
     `place.fields`= place_fields,
     `poll.fields` = poll_fields)
-  
+
   # Set which fields to return from Tweet
   if(params$tweet.fields == "ALL"){
     params$tweet.fields <- "attachments,author_id,context_annotations,conversation_id,created_at,entities,geo,id,in_reply_to_user_id,lang,possibly_sensitive,public_metrics,referenced_tweets,reply_settings,source,text,withheld"
@@ -63,7 +63,7 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
   } else {
     # Keep Current Query for tweet fields
   }
-  
+
   # Set which fields to return from user
   if(params$user.fields == "ALL"){
     params$user.fields <- "created_at,description,entities,id,location,name,pinned_tweet_id,profile_image_url,protected,public_metrics,url,username,verified,withheld"
@@ -72,7 +72,7 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
   } else {
     # Keep Current Query for tweet fields
   }
-  
+
   # Set which fields to return from expansions
   if(params$expansions == "ALL"){
     params$expansions <- "author_id,referenced_tweets.id,referenced_tweets.id.author_id,entities.mentions.username,attachments.poll_ids,attachments.media_keys,in_reply_to_user_id,geo.place_id"
@@ -81,7 +81,7 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
   } else {
     # Keep Current Query for tweet fields
   }
-  
+
   # Set which fields to return from place
   if(params$place.fields == "ALL"){
     params$place.fields <- "contained_within,country,country_code,full_name,geo,id,name,place_type"
@@ -90,7 +90,7 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
   } else {
     # Keep Current Query for tweet fields
   }
-  
+
   # Set which fields to return from polls
   if(params$poll.fields == "ALL"){
     params$poll.fields <- "duration_minutes,end_datetime,id,options,voting_status"
@@ -99,27 +99,27 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
   } else {
     # Keep Current Query for tweet fields
   }
-  
-  # setup header for authentification 
+
+  # setup header for authentification
   headers <- c(`Authorization` = sprintf('Bearer %s', Bearer_Token))
 
-  
-  # pagination or not 
+
+  # pagination or not
   if(n < 101){
-    
+
     # setup parameter for max_results
-    params$max_results <- 100    
-    
+    params$max_results <- 100
+
     response <- httr::GET(url = paste0('https://api.twitter.com/2/users/',user_id,'/tweets'), httr::add_headers(.headers=headers),query = params)
     #print(response)
-    
+
     # return Data
     results_list <- fromJSON(content(response, "text", encoding = "UTF-8"))
     ret <- data_parser_timeline(results_list)
     data <- ret[[1]]
   } else {
     rate_limit_remaining <- 100
-    n_pg <- ceiling(n / 100) 
+    n_pg <- ceiling(n / 100)
     modulo <- n %% 100
     for(i in 1:n_pg){
       if(i == 1){
@@ -141,47 +141,47 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
         params$pagination_token <-  pg_token
       }
       if(pg_token =="no_next_token"){
-        
+
       } else {
-        
+
         if(rate_limit_remaining < 1){
           cat(paste0("Rate Limit Reached! Function will wait for ", difftime(rate_limit_reset, Sys.time(), units='mins'),"minutes.\n"))
           wait_time <- difftime(rate_limit_reset, Sys.time(), units='secs') + 30
           Sys.sleep(wait_time)
         }
-        
+
         response <- httr::GET(url = paste0('https://api.twitter.com/2/users/',user_id,'/tweets'), httr::add_headers(.headers=headers),query = params)
         #print(response)
-        
+
         if(response[["status_code"]] == 200){
           #cat("Status 200: Everything went fine!\n")
         } else if(response[["status_code"]] == 400) {
           cat("Something went wrong!\n")
-          cat(paste0(content(response)$errors[[1]]$message,"\n")) 
+          cat(paste0(content(response)$errors[[1]]$message,"\n"))
         } else if (response[["status_code"]] == 404){
           cat("Something went wrong!\n")
-          cat(paste0(content(response)$errors[[1]]$message,"\n")) 
+          cat(paste0(content(response)$errors[[1]]$message,"\n"))
         } else {
-          
+
         }
-        
+
         results_list <- jsonlite::fromJSON(httr::content(response, "text"), simplifyDataFrame =  F)
-        
+
         rate_limit<- response[["headers"]][["x-rate-limit-limit"]]
         rate_limit_remaining <- response[["headers"]][["x-rate-limit-remaining"]]
         rate_limit_reset <- as.POSIXct(as.numeric(response[["headers"]][["x-rate-limit-reset"]]), origin = "1970-01-01")
-        
+
         ret <- data_parser_timeline(results_list)
         pg_token <- ret[[2]]
         ret <- ret[[1]]
-        
+
         if(i == 1){
           data <- ret
         } else {
           data <- dplyr::bind_rows(data,ret)
         }
       }
-     
+
     }
   }
   return(data)
