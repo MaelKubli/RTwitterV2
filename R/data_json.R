@@ -22,36 +22,11 @@ require(readr)
 ##################################################################################################
 # Helper Functions
 ##################################################################################################
-# flatten list of lists where lists are nested within and of unequal length!
-.flattenlist <- function(x){
-  morelists <- sapply(x, function(xprime) class(xprime)[1]=="list")
-  out <- c(x[!morelists], unlist(x[morelists], recursive=FALSE))
-  if(sum(morelists)){
-    Recall(out)
-  }else{
-    return(out)
-  }
-}
-
-# combine listed columns to one column
-.combine_list_columns_tweets <- function(h, dt){
-  if(length(h) == 1){
-    h_ret <- lapply(dt[, h], function(x){y <- gsub("\\,\\s","\\,", toString(na.omit(x)))
-    y <- ifelse(y == "", NA, y)
-    return(y)})
-  } else {
-    h_ret <- apply(dt[, h], 1, function(x){y <- gsub("\\,\\s","\\,", toString(na.omit(x)))
-    y <- ifelse(y == "", NA, y)
-    return(y)})
-  }
-}
-
-
 ##################################################################################################
 # Save Data as JSON File (save each iteration and append new iteration to file)
 ##################################################################################################
 
-.data_json <- function(data_twitter = data){
+data_json <- function(data_twitter = data){
 
   #--------------------------------
   # Twitter List
