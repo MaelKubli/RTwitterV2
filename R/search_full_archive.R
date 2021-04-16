@@ -190,7 +190,7 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
       if(pg_token == "no_next_token"){
         get_results = FALSE
         counter <- 2
-      } else if (lubridate::as_datetime(date_check_l) >lubridate::as_datetime(date_check_u)){
+      } else if (lubridate::as_datetime(date_check_l) > lubridate::as_datetime(date_check_u)){
         get_results = FALSE
         counter <- 2
       } else if (results_count >= n_check) {

@@ -35,16 +35,16 @@ require(readr)
 
 # combine listed columns to one column
 .combine_list_columns_tweets <- function(h, dt){
-    if(length(h) == 1){
-      h_ret <- lapply(dt[, h], function(x){y <- gsub("\\,\\s","\\,", toString(na.omit(x)))
-      y <- ifelse(y == "", NA, y)
-      return(y)})
-    } else {
-      h_ret <- apply(dt[, h], 1, function(x){y <- gsub("\\,\\s","\\,", toString(na.omit(x)))
-      y <- ifelse(y == "", NA, y)
-      return(y)})
-    }
+  if(length(h) == 1){
+    h_ret <- lapply(dt[, h], function(x){y <- gsub("\\,\\s","\\,", toString(na.omit(x)))
+    y <- ifelse(y == "", NA, y)
+    return(y)})
+  } else {
+    h_ret <- apply(dt[, h], 1, function(x){y <- gsub("\\,\\s","\\,", toString(na.omit(x)))
+    y <- ifelse(y == "", NA, y)
+    return(y)})
   }
+}
 
 # transform_tweets_data
 .tweets_transformer <- function(dt){
@@ -623,7 +623,7 @@ data_parser_timeline <- function(results_data){
   }
   dt <- list(dt,next_token)
   return(dt)
-  }
+}
 
 
 ##################################################################################################
