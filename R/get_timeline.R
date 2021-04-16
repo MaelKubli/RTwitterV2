@@ -8,18 +8,6 @@
 ##################################################################################################
 # Content
 ##################################################################################################
-# Dependencies
-##################################################################################################
-require(httr)
-require(httpuv)
-require(RCurl)
-require(ROAuth)
-require(jsonlite)
-require(data.table)
-require(purrr)
-require(lubridate)
-require(readr)
-##################################################################################################
 # Get Timelines of Users by ID (only ID Works at the moment)
 ##################################################################################################
 get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL", user_fields = "ALL",
@@ -30,6 +18,12 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
   suppressPackageStartupMessages(require(rjson))
   suppressPackageStartupMessages(require(jsonlite))
   suppressPackageStartupMessages(require(data.table))
+  suppressPackageStartupMessages(require(httpuv))
+  suppressPackageStartupMessages(require(RCurl))
+  suppressPackageStartupMessages(require(ROAuth))
+  suppressPackageStartupMessages(require(purrr))
+  suppressPackageStartupMessages(require(lubridate))
+  suppressPackageStartupMessages(require(readr))
 
   # Check if Bearer Token is set:
   if(is.na(token) | nchar(token) != 112){
