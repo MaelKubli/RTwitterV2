@@ -720,7 +720,7 @@ data_parser_search_full <- function(results_data){
     data_list[[i]]$attachments$media_keys <- gsub("\\,\\s","\\,", toString(na.omit(data_list[[i]]$attachments$media_keys)))
   }
   dt <- lapply(data_list,.flattenlist)
-  dt <- map(dt, as.data.table)
+  dt <- purrr::map(dt, as.data.table)
   dt <- rbindlist(dt, fill = TRUE)
   dt <- as.data.frame(dt)
 
