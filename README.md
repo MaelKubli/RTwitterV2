@@ -4,7 +4,7 @@ This Repository contains code to loop through timelines and the academic search 
 
 ## Istallation
 ```r
-devtools::install_github("MaelKubli/RTwitterV2)
+devtools::install_github("MaelKubli/RTwitterV2")
 ```
 
 ## Demo
