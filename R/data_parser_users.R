@@ -36,7 +36,7 @@ data_parser_users <- function(results_data){
   suppressPackageStartupMessages(require(lubridate))
   suppressPackageStartupMessages(require(readr))
   
-  du <- lapply(results_data,.flattenlist)
+  du <- lapply(results_data,flattenlist)
   du <- purrr::map(du, as.data.table)
   du <- data.table::rbindlist(du, fill = TRUE)
   du <- as.data.frame(du)
