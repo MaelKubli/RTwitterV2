@@ -48,6 +48,19 @@ require(readr)
 
 # transform_tweets_data
 .tweets_transformer <- function(dt){
+  
+  # required packages:
+  suppressPackageStartupMessages(require(httr))
+  suppressPackageStartupMessages(require(rjson))
+  suppressPackageStartupMessages(require(jsonlite))
+  suppressPackageStartupMessages(require(data.table))
+  suppressPackageStartupMessages(require(httpuv))
+  suppressPackageStartupMessages(require(RCurl))
+  suppressPackageStartupMessages(require(ROAuth))
+  suppressPackageStartupMessages(require(purrr))
+  suppressPackageStartupMessages(require(lubridate))
+  suppressPackageStartupMessages(require(readr))
+  
   # Remove cols we have no use for
   h <- grep("\\.start$|\\.end$", names(dt), value = T)
   dt <- dt[ , !names(dt) %in% h]
@@ -268,6 +281,19 @@ require(readr)
 # --- testing stuff end --- #
 
 data_parser_timeline <- function(results_data){
+  
+  # required packages:
+  suppressPackageStartupMessages(require(httr))
+  suppressPackageStartupMessages(require(rjson))
+  suppressPackageStartupMessages(require(jsonlite))
+  suppressPackageStartupMessages(require(data.table))
+  suppressPackageStartupMessages(require(httpuv))
+  suppressPackageStartupMessages(require(RCurl))
+  suppressPackageStartupMessages(require(ROAuth))
+  suppressPackageStartupMessages(require(purrr))
+  suppressPackageStartupMessages(require(lubridate))
+  suppressPackageStartupMessages(require(readr))
+  
   ##################################################################
   # ---- data part ---- #
   ##################################################################
@@ -630,6 +656,19 @@ data_parser_timeline <- function(results_data){
 # Parse get_users_v2 Data
 ##################################################################################################
 data_parser_users <- function(results_data){
+  
+  # required packages:
+  suppressPackageStartupMessages(require(httr))
+  suppressPackageStartupMessages(require(rjson))
+  suppressPackageStartupMessages(require(jsonlite))
+  suppressPackageStartupMessages(require(data.table))
+  suppressPackageStartupMessages(require(httpuv))
+  suppressPackageStartupMessages(require(RCurl))
+  suppressPackageStartupMessages(require(ROAuth))
+  suppressPackageStartupMessages(require(purrr))
+  suppressPackageStartupMessages(require(lubridate))
+  suppressPackageStartupMessages(require(readr))
+  
   du <- lapply(results_data,.flattenlist)
   du <- purrr::map(du, as.data.table)
   du <- rbindlist(du, fill = TRUE)
@@ -715,6 +754,19 @@ data_parser_users <- function(results_data){
 # Parse full_archive_search
 ##################################################################################################
 data_parser_search_full <- function(results_data){
+  
+  # required packages:
+  suppressPackageStartupMessages(require(httr))
+  suppressPackageStartupMessages(require(rjson))
+  suppressPackageStartupMessages(require(jsonlite))
+  suppressPackageStartupMessages(require(data.table))
+  suppressPackageStartupMessages(require(httpuv))
+  suppressPackageStartupMessages(require(RCurl))
+  suppressPackageStartupMessages(require(ROAuth))
+  suppressPackageStartupMessages(require(purrr))
+  suppressPackageStartupMessages(require(lubridate))
+  suppressPackageStartupMessages(require(readr))
+  
   data_list <- results_data$data
   for(i in 1:length(data_list)){
     data_list[[i]]$attachments$media_keys <- gsub("\\,\\s","\\,", toString(na.omit(data_list[[i]]$attachments$media_keys)))
