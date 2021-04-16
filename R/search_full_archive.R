@@ -22,10 +22,10 @@ require(readr)
 ##################################################################################################
 # Get Timelines of Users by ID (only ID Works at the moment)
 ##################################################################################################
-.full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "ALL", user_fields = "ALL",
-                                 since_id = NA, until_id = NA, start_time = NA, end_time = NA, api_wait = 12,
-                                 expansions = "ALL", place_fields = "ALL", media_fields = "ALL", poll_fields = "NONE",
-                                 n = NA, JSON = FALSE, storage_path = "archive_searched_tweets.json"){
+full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "ALL", user_fields = "ALL",
+                                since_id = NA, until_id = NA, start_time = NA, end_time = NA, api_wait = 12,
+                                expansions = "ALL", place_fields = "ALL", media_fields = "ALL", poll_fields = "NONE",
+                                n = NA, JSON = FALSE, storage_path = "archive_searched_tweets.json"){
 
   # required packages:
   suppressPackageStartupMessages(require(httr))
