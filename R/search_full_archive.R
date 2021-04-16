@@ -143,7 +143,7 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
   # define scope of search (max_results / since_id / start_time)
   if(is.na(start_time)){
     params$start_time <- NULL
-    start_time_check <- as_datetime(Sys.time()) - 10000
+    start_time_check <-lubridate::as_datetime(Sys.time()) - 10000
   } else {
     start_time_check <- start_time
   }
@@ -151,7 +151,7 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
   # define scope of search (max_results / since_id / start_time)
   if(is.na(end_time)){
     params$end_time <- NULL
-    end_time_check <- as_datetime(Sys.time())
+    end_time_check <-lubridate::as_datetime(Sys.time())
   } else {
     end_time_check <- end_time
   }
@@ -190,7 +190,7 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
       if(pg_token == "no_next_token"){
         get_results = FALSE
         counter <- 2
-      } else if (as_datetime(date_check_l) > as_datetime(date_check_u)){
+      } else if (as_datetime(date_check_l) >lubridate::as_datetime(date_check_u)){
         get_results = FALSE
         counter <- 2
       } else if (results_count >= n_check) {
