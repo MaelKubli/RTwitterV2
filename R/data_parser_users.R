@@ -38,7 +38,7 @@ data_parser_users <- function(results_data){
   
   du <- lapply(results_data,.flattenlist)
   du <- purrr::map(du, as.data.table)
-  du <- rbindlist(du, fill = TRUE)
+  du <- data.table::rbindlist(du, fill = TRUE)
   du <- as.data.frame(du)
   ## Remove cols we have no use for
   h <- grep("\\.start$|\\.end$", names(du), value = T)

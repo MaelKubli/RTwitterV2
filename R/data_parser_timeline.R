@@ -52,7 +52,7 @@ data_parser_timeline <- function(results_data){
   
   dt <- lapply(data_list,flattenlist)
   dt <- purrr::map(dt, as.data.table)
-  dt <- rbindlist(dt, fill = TRUE)
+  dt <- data.table::rbindlist(dt, fill = TRUE)
   dt <- as.data.frame(dt)
   
   dt <- tweets_transformer(dt)
@@ -89,7 +89,7 @@ data_parser_timeline <- function(results_data){
   user_list <- includes_list$users
   du <- lapply(user_list,.flattenlist)
   du <- purrr::map(du, as.data.table)
-  du <- rbindlist(du, fill = TRUE)
+  du <- data.table::rbindlist(du, fill = TRUE)
   du <- as.data.frame(du)
   ## Remove cols we have no use for
   h <- grep("\\.start$|\\.end$", names(du), value = T)
@@ -170,7 +170,7 @@ data_parser_timeline <- function(results_data){
   if(is.null(media_list)==FALSE){
     dm <- lapply(media_list,.flattenlist)
     dm <- purrr::map(dm, as.data.table)
-    dm <- rbindlist(dm, fill = TRUE)
+    dm <- data.table::rbindlist(dm, fill = TRUE)
     colnames_pre <- names(dm)
     colnames_pre <- paste0("media_",colnames_pre,"_i")
     colnames(dm) <- colnames_pre
@@ -215,7 +215,7 @@ data_parser_timeline <- function(results_data){
     }
     dp <- lapply(places_list,.flattenlist)
     dp <- purrr::map(dp, as.data.table)
-    dp <- rbindlist(dp, fill = TRUE)
+    dp <- data.table::rbindlist(dp, fill = TRUE)
     colnames_pre <- names(dp)
     colnames_pre <- paste0("places_",colnames_pre,"_i")
     colnames(dp) <- colnames_pre
@@ -257,7 +257,7 @@ data_parser_timeline <- function(results_data){
   }
   drrqt <- lapply(tweet_list,.flattenlist)
   drrqt <- purrr::map(drrqt, as.data.table)
-  drrqt <- rbindlist(drrqt, fill = TRUE)
+  drrqt <- data.table::rbindlist(drrqt, fill = TRUE)
   drrqt <- as.data.frame(drrqt)
   
   drrqt <- .tweets_transformer(drrqt)
@@ -276,10 +276,10 @@ data_parser_timeline <- function(results_data){
     # No Quotes
   } else {
     helper <- purrr::map(strsplit(unlist(d_tmp_1$referenced_tweets_type), split = ","), as.data.table)
-    helper <- rbindlist(helper, fill = TRUE)
+    helper <- data.table::rbindlist(helper, fill = TRUE)
     selector <- grepl("quoted", helper$V1)
     helper <- purrr::map(strsplit(unlist(d_tmp_1$referenced_tweets_id), split = ","), as.data.table)
-    helper <- rbindlist(helper, fill = TRUE)
+    helper <- data.table::rbindlist(helper, fill = TRUE)
     helper$selector <- selector
     helper <- helper[helper$selector == TRUE]
     d_tmp_q <- drrqt[drrqt$status_id %in% helper$V1, ]
@@ -312,10 +312,10 @@ data_parser_timeline <- function(results_data){
     # No Retweets
   } else {
     helper <- purrr::map(strsplit(unlist(d_tmp_2$referenced_tweets_type), split = ","), as.data.table)
-    helper <- rbindlist(helper, fill = TRUE)
+    helper <- data.table::rbindlist(helper, fill = TRUE)
     selector <- grepl("retweeted", helper$V1)
     helper <- purrr::map(strsplit(unlist(d_tmp_2$referenced_tweets_id), split = ","), as.data.table)
-    helper <- rbindlist(helper, fill = TRUE)
+    helper <- data.table::rbindlist(helper, fill = TRUE)
     helper$selector <- selector
     helper <- helper[helper$selector == TRUE]
     d_tmp_r <- drrqt[drrqt$status_id %in% helper$V1, ]
