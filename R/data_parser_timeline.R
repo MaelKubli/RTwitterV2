@@ -294,7 +294,7 @@ data_parser_timeline <- function(results_data){
     colnames(d_tmp_q) <- colnames_new
 
     d_tmp_1$quoted_status_id <- helper$V1
-    d_tmp_q <- merge(d_tmp_1,d_tmp_q, by = "quoted_status_id")
+    d_tmp_q <- base::merge(d_tmp_1,d_tmp_q, by = "quoted_status_id")
 
     # ---- add quotes user fields to dt ---- #
     dq <- dqr[dqr$user_id %in% unique(d_tmp_q$quoted_user_id), ]
@@ -329,7 +329,7 @@ data_parser_timeline <- function(results_data){
     colnames(d_tmp_r) <- colnames_new
 
     d_tmp_2$retweet_status_id <- helper$V1
-    d_tmp_r <- merge(d_tmp_2,d_tmp_r, by = "retweet_status_id")
+    d_tmp_r <- base::merge(d_tmp_2,d_tmp_r, by = "retweet_status_id")
 
     # ---- add retweets user fields to dt ---- #
     dr <- dqr[dqr$user_id %in% unique(d_tmp_r$retweet_user_id), ]
@@ -345,16 +345,16 @@ data_parser_timeline <- function(results_data){
   if(nrow(d_tmp_2) == 0){
     # No Re-Tweets to add
   } else {
-    dt <- merge(dt, d_tmp_r, by = eq_cols, all.x = TRUE, all.y = TRUE)
-    dt <- merge(dt, dr, by = "retweet_user_id", all.x = TRUE, all.y = TRUE)
+    dt <- base::merge(dt, d_tmp_r, by = eq_cols, all.x = TRUE, all.y = TRUE)
+    dt <- base::merge(dt, dr, by = "retweet_user_id", all.x = TRUE, all.y = TRUE)
     rm(d_tmp_r,d_tmp_2,dr)
   }
 
   if(nrow(d_tmp_1)==0){
     # No Quoted Tweets to add
   } else {
-    dt <- merge(dt, d_tmp_q, by = eq_cols, all.x = TRUE, all.y = TRUE)
-    dt <- merge(dt, dq, by = "quoted_user_id", all.x = TRUE, all.y = TRUE)
+    dt <- base::merge(dt, d_tmp_q, by = eq_cols, all.x = TRUE, all.y = TRUE)
+    dt <- base::merge(dt, dq, by = "quoted_user_id", all.x = TRUE, all.y = TRUE)
     rm(d_tmp_q,d_tmp_1,dq)
   }
 
