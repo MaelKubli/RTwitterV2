@@ -28,7 +28,7 @@ get_user_v2 <- function(token = NA, user_ids = NA, user_names = NA, user_fields 
     stop("Please add the Bearer Token of your projects dashboard!\nget_timelines_v2(token = 'token')\n")
   }
   # Check if at least one User ID is set:
-  if(is.na(user_ids) | !is.character(user_ids)){
+  if(is.na(user_ids) & is.na(user_names)){
     stop("Please add at least one Search Term to the Search Query!\n")
   }
   if(is.na(user_ids) == T & is.na(user_names) == T){
@@ -36,7 +36,7 @@ get_user_v2 <- function(token = NA, user_ids = NA, user_names = NA, user_fields 
   }
 
   params = list(
-    `username` = user_names,
+    `usernames` = user_names,
     `ids` = user_ids,
     `tweet.fields` = tweet_fields,
     `user.fields` = user_fields,
@@ -72,11 +72,25 @@ get_user_v2 <- function(token = NA, user_ids = NA, user_names = NA, user_fields 
   # setup header for authentification
   headers <- c(`Authorization` = sprintf('Bearer %s', token))
   if(is.na(user_ids) == T){
-    params$ids <- NULL
-    response <- httr::GET(url = paste0("https://api.twitter.com/2/users/by"), httr::add_headers(.headers=headers),query = params)
+    if(grepl(",",user_names) == T){
+      params$ids <- NULL
+      params$username <- NULL
+      response <- httr::GET(url = paste0("https://api.twitter.com/2/users/by"), httr::add_headers(.headers=headers),query = params)
+    } else {
+      params$ids <- NULL
+      params$usernames <- NULL
+      response <- httr::GET(url = paste0("https://api.twitter.com/2/users/by/username/",user_names), httr::add_headers(.headers=headers),query = params)
+    }
+
   } else {
-    params$username <- NULL
-    response <- httr::GET(url = paste0("https://api.twitter.com/2/users"), httr::add_headers(.headers=headers),query = params)
+    if(grepl(",",user_ids) == T){
+      params$usernames <- NULL
+      response <- httr::GET(url = paste0("https://api.twitter.com/2/users"), httr::add_headers(.headers=headers),query = params)
+    } else {
+      params$usernames <- NULL
+      response <- httr::GET(url = paste0("https://api.twitter.com/2/users"), httr::add_headers(.headers=headers),query = params)
+    }
+
   }
 
   #print(response)

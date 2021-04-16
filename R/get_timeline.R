@@ -108,7 +108,7 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
     #print(response)
 
     # return Data
-    results_list <- jsonlite::fromJSON(content(response, "text", encoding = "UTF-8"))
+    results_list <- jsonlite::fromJSON(httr::content(response, "text"), simplifyDataFrame =  F)
     ret <- data_parser_timeline(results_list)
     data <- ret[[1]]
   } else {
