@@ -87,7 +87,7 @@ data_parser_timeline <- function(results_data){
   ##################################################################
   ## users fields
   user_list <- includes_list$users
-  du <- lapply(user_list,.flattenlist)
+  du <- lapply(user_list,flattenlist)
   du <- purrr::map(du, as.data.table)
   du <- data.table::rbindlist(du, fill = TRUE)
   du <- as.data.frame(du)
@@ -168,7 +168,7 @@ data_parser_timeline <- function(results_data){
   ##################################################################
   media_list <- includes_list$media
   if(is.null(media_list)==FALSE){
-    dm <- lapply(media_list,.flattenlist)
+    dm <- lapply(media_list,flattenlist)
     dm <- purrr::map(dm, as.data.table)
     dm <- data.table::rbindlist(dm, fill = TRUE)
     colnames_pre <- names(dm)
@@ -213,7 +213,7 @@ data_parser_timeline <- function(results_data){
     for(i in 1:length(places_list)){
       places_list[[i]]$geo$bbox <- gsub("\\,\\s","\\,", toString(na.omit(places_list[[i]]$geo$bbox)))
     }
-    dp <- lapply(places_list,.flattenlist)
+    dp <- lapply(places_list,flattenlist)
     dp <- purrr::map(dp, as.data.table)
     dp <- data.table::rbindlist(dp, fill = TRUE)
     colnames_pre <- names(dp)
@@ -255,7 +255,7 @@ data_parser_timeline <- function(results_data){
   for(i in 1:length(tweet_list)){
     tweet_list[[i]]$attachments$media_keys <- gsub("\\,\\s","\\,", toString(na.omit(tweet_list[[i]]$attachments$media_keys)))
   }
-  drrqt <- lapply(tweet_list,.flattenlist)
+  drrqt <- lapply(tweet_list,flattenlist)
   drrqt <- purrr::map(drrqt, as.data.table)
   drrqt <- data.table::rbindlist(drrqt, fill = TRUE)
   drrqt <- as.data.frame(drrqt)
