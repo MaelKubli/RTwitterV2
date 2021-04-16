@@ -32,6 +32,7 @@ data_parser_timeline <- function(results_data){
 
   # required packages:
   suppressPackageStartupMessages(require(httr))
+  suppressPackageStartupMessages(require(rjson))
   suppressPackageStartupMessages(require(jsonlite))
   suppressPackageStartupMessages(require(data.table))
   suppressPackageStartupMessages(require(httpuv))
