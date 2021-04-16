@@ -101,7 +101,7 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
   }
 
   # setup header for authentification
-  headers <- c(`Authorization` = sprintf('Bearer %s', Bearer_Token))
+  headers <- c(`Authorization` = sprintf('Bearer %s', token))
 
 
   # pagination or not
