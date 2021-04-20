@@ -17,12 +17,11 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
 
   # required packages:
   suppressPackageStartupMessages(require(httr))
-  suppressPackageStartupMessages(require(rjson))
-  suppressPackageStartupMessages(require(jsonlite))
-  suppressPackageStartupMessages(require(data.table))
   suppressPackageStartupMessages(require(httpuv))
   suppressPackageStartupMessages(require(RCurl))
   suppressPackageStartupMessages(require(ROAuth))
+  suppressPackageStartupMessages(require(jsonlite))
+  suppressPackageStartupMessages(require(data.table))
   suppressPackageStartupMessages(require(purrr))
   suppressPackageStartupMessages(require(lubridate))
   suppressPackageStartupMessages(require(readr))

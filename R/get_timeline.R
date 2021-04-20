@@ -93,7 +93,7 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
     # Keep Current Query for tweet fields
   }
 
-  # setup header for authentification
+  # setup header for authentication
   headers <- c(`Authorization` = sprintf('Bearer %s', token))
 
 
