@@ -72,7 +72,7 @@ data_parser_timeline <- function(results_data){
 
   h <- grep("geo\\.place_id", names(dt), value = T)
   if(length(h) != 0){
-    tmp <- setDT(dt)[, data.table::tstrsplit(geo.place_id,
+    tmp <- setDT(dt)[, data.table::tstrsplit(dt$geo.place_id,
                                              ',', perl=TRUE)]
     tmp <- setnames(tmp, paste0('geo.place_id_', 1:ncol(tmp)))[]
     dt <- cbind(dt,tmp)
