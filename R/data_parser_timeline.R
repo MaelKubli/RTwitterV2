@@ -67,7 +67,7 @@ data_parser_timeline <- function(results_data){
     tmp <- setDT(dt)[, strsplit(attachments.media_keys,
                                              ',', perl=TRUE)]
     tmp <- as.data.frame(t(tmp))
-    tmp <- setnames(tmp, paste0('attachments.media_keys_', 1:ncol(tmp)))[]
+    tmp <- data.table::setnames(tmp, paste0('attachments.media_keys_', 1:ncol(tmp)))[]
     dt <- cbind(dt,tmp)
   }
 
