@@ -78,6 +78,8 @@ data_parser_timeline <- function(results_data){
     tmp <- setnames(tmp, paste0('geo.place_id_', 1:ncol(tmp)))[]
     dt <- cbind(dt,tmp)
   }
+
+  cat("Is it running up to here?\n")
   ##################################################################
   # ---- includes part ---- #
   ##################################################################
