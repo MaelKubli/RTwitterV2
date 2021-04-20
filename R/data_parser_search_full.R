@@ -55,7 +55,7 @@ data_parser_search_full <- function(results_data){
   # split Keys variables...
   h <- grep("attachments\\.media_keys", names(dt), value = T)
   if(length(h) != 0){
-    tmp <- setDT(dt)[, data.table::tstrsplit(attachments.media_keys,
+    tmp <- setDT(dt)[, data.table::tstrsplit(dt$attachments.media_keys,
                                              ',', perl=TRUE)]
     if(ncol(tmp)==0){
 
@@ -67,7 +67,7 @@ data_parser_search_full <- function(results_data){
 
   h <- grep("geo\\.place_id", names(dt), value = T)
   if(length(h) != 0){
-    tmp <- setDT(dt)[, data.table::tstrsplit(geo.place_id,
+    tmp <- setDT(dt)[, data.table::tstrsplit(dt$geo.place_id,
                                              ',', perl=TRUE)]
 
     if(ncol(tmp)==0){
