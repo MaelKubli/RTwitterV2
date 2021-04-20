@@ -15,12 +15,11 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
 {
   # required packages:
   suppressPackageStartupMessages(require(httr))
-  suppressPackageStartupMessages(require(rjson))
-  suppressPackageStartupMessages(require(jsonlite))
-  suppressPackageStartupMessages(require(data.table))
   suppressPackageStartupMessages(require(httpuv))
   suppressPackageStartupMessages(require(RCurl))
   suppressPackageStartupMessages(require(ROAuth))
+  suppressPackageStartupMessages(require(jsonlite))
+  suppressPackageStartupMessages(require(data.table))
   suppressPackageStartupMessages(require(purrr))
   suppressPackageStartupMessages(require(lubridate))
   suppressPackageStartupMessages(require(readr))
