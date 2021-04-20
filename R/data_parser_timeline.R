@@ -64,6 +64,7 @@ data_parser_timeline <- function(results_data){
   # split Keys variables...
   h <- grep("attachments\\.media_keys", names(dt), value = T)
   if(length(h) != 0){
+    Sys.sleep(0.1)
     tmp <- setDT(dt)[, base::strsplit(attachments.media_keys,
                                              ',', perl=TRUE)]
     tmp <- as.data.frame(t(tmp))
