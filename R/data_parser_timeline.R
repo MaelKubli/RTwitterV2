@@ -64,16 +64,20 @@ data_parser_timeline <- function(results_data){
   # split Keys variables...
   h <- grep("attachments\\.media_keys", names(dt), value = T)
   if(length(h) != 0){
-    tmp <- setDT(dt)[, data.table::tstrsplit(dt$attachments.media_keys,
-                                             ',', perl=TRUE)]
+    #tmp <- setDT(dt)[, data.table::tstrsplit(dt$attachments.media_keys,
+     #                                        ',', perl=TRUE)]
+    tmp <- as.data.table(data.table::tstrsplit(dt$attachments.media_keys,
+                                               ',', perl=TRUE))
     tmp <- setnames(tmp, paste0('attachments.media_keys_', 1:ncol(tmp)))[]
     dt <- cbind(dt,tmp)
   }
 
   h <- grep("geo\\.place_id", names(dt), value = T)
   if(length(h) != 0){
-    tmp <- setDT(dt)[, data.table::tstrsplit(dt$geo.place_id,
-                                             ',', perl=TRUE)]
+    #tmp <- setDT(dt)[, data.table::tstrsplit(dt$geo.place_id,
+     #                                        ',', perl=TRUE)]
+    tmp <- as.data.table(data.table::tstrsplit(dt$geo.place_id,
+                                               ',', perl=TRUE))
     tmp <- setnames(tmp, paste0('geo.place_id_', 1:ncol(tmp)))[]
     dt <- cbind(dt,tmp)
   }
