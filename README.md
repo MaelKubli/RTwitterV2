@@ -5,6 +5,7 @@ This Repository contains code to loop through timelines and the academic search 
 ## Istallation
 ```r
 devtools::install_github("MaelKubli/RTwitterV2")
+library(RTwitterV2)
 ```
 
 ## Demo
@@ -23,7 +24,7 @@ Bearer_Token <- "" #Insert your Bearer Token
 test <- get_user_v2(token = Bearer_Token, user_ids = "959432550400831488,62777265,14273050")
 ```
 
-Getting Tweets from a Query (Academic Track Required!)
+Getting Tweets from a Query with a set timeframe (Academic Track Required!)
 
 ```r
 Bearer_Token <- "" #Insert your Beaer Token
@@ -41,3 +42,50 @@ test <- full_archive_search(token = Bearer_Token,
 
 ```
 
+Apart from collecting tweets with a start_time and end_time you can also search Tweets within a range of id's by setting a lower and upper bound via since_id and until_id or simply search a sample of X tweets by setting n to a given number.
+If you are going to collect tweets in a big manner. I advise you to loop to smaller timeframes or id ranges, since the package is still experimental and might stop working after a prolonged continuous search of tweets. 
+
+For example, collect Tweets with the hashtag #abst21 from 2021 like this:
+
+```r
+# libraries
+library(readr)
+library(dplyr)
+library(RTwitterV2)
+
+# Set Directory
+setwd("Your Directory of choice")
+
+# query
+query <- "#abst21"
+
+# timeframe
+days <- seq(as.Date("2021-01-01"),as.Date("2021-04-01"), by =  "day")
+
+
+# collect tweets
+df <- NULL
+
+for(i in 2:length(days)){
+  lower <- paste0(days[i-1],"T00:00:01Z")
+  upper <- paste0(days[i],"T00:00:01Z")
+  
+  tmp <- .full_archive_search(token = Bearer_MK, 
+                              search_query = query_content, 
+                              start_time = lower, 
+                              end_time = upper, 
+                              n = 250000)
+  
+  if(is.null(df)==T){
+    df <- tmp
+    setwd(parent_path)
+    write_csv(df, "abst21_Jan-Mar.csv")
+  } else {
+    df <- dplyr::bind_rows(df,tmp)
+    setwd(parent_path)
+    write_csv(df, "abst21_Jan-Mar.csv")
+  }
+  cat(paste0(lower," to ",upper, "has been colleted!\n"))  
+}
+
+```
