@@ -57,7 +57,7 @@ library(RTwitterV2)
 setwd("Your Directory of choice")
 
 # Bearer Token
-Bearer_Token <- "" # Your Bearer Token
+Bearer_Token <- "" # Your Bearer-Token
 
 # query
 query <- "#abst21"
@@ -74,7 +74,7 @@ for(i in 2:length(days)){
   upper <- paste0(days[i],"T00:00:01Z")
   
   tmp <- .full_archive_search(token = Bearer_Token, 
-                              search_query = query_content, 
+                              search_query = query, 
                               start_time = lower, 
                               end_time = upper, 
                               n = 250000)
