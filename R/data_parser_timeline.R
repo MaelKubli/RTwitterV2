@@ -68,7 +68,7 @@ data_parser_timeline <- function(results_data){
      #                                        ',', perl=TRUE)]
     tmp <- as.data.table(data.table::tstrsplit(dt$attachments.media_keys,
                                                ',', perl=TRUE))
-    tmp <- setnames(tmp, new = paste0('attachments.media_keys_', 1:ncol(tmp)))
+    tmp <- setnames(tmp, paste0('attachments.media_keys_', 1:ncol(tmp)))
     dt <- cbind(dt,tmp)
   }
 
@@ -78,7 +78,7 @@ data_parser_timeline <- function(results_data){
      #                                        ',', perl=TRUE)]
     tmp <- as.data.table(data.table::tstrsplit(dt$geo.place_id,
                                                ',', perl=TRUE))
-    tmp <- setnames(tmp, new = paste0('geo.place_id_', 1:ncol(tmp)))
+    tmp <- setnames(tmp, paste0('geo.place_id_', 1:ncol(tmp)))
     dt <- cbind(dt,tmp)
   }
   ##################################################################
