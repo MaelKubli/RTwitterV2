@@ -64,9 +64,9 @@ data_parser_timeline <- function(results_data){
   # split Keys variables...
   h <- grep("attachments\\.media_keys", names(dt), value = T)
   if(length(h) != 0){
-    pos_df <- grep("attachments\\.media_keys", names(dt))
-    tmp <- setDT(dt)[, data.table::tstrsplit(dt[,16],
+    tmp <- setDT(dt)[, strsplit(attachments.media_keys,
                                              ',', perl=TRUE)]
+    tmp <- as.data.frame(t(tmp))
     tmp <- setnames(tmp, paste0('attachments.media_keys_', 1:ncol(tmp)))[]
     dt <- cbind(dt,tmp)
   }
