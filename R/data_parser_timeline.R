@@ -67,7 +67,7 @@ data_parser_timeline <- function(results_data){
     tmp <- setDT(dt)[, data.table::tstrsplit(dt$attachments.media_keys,
                                             ',', perl=TRUE)]
     old_n <- names(tmp)
-    setnames(tmp, old = old_n, new = paste0('attachments.media_keys_', 1:ncol(tmp)))
+    tmp <- setnames(tmp, old = old_n, new = paste0('attachments.media_keys_', 1:ncol(tmp)))[]
     dt <- cbind(dt,tmp)
   }
 
@@ -76,7 +76,7 @@ data_parser_timeline <- function(results_data){
     tmp <- setDT(dt)[, data.table::tstrsplit(dt$geo.place_id,
                                              ',', perl=TRUE)]
     old_n <- names(tmp)
-    setnames(tmp, old = old_n, new = paste0('geo.place_id_', 1:ncol(tmp)))
+    tmp <- setnames(tmp, old = old_n, new = paste0('geo.place_id_', 1:ncol(tmp)))[]
     dt <- cbind(dt,tmp)
   }
   ##################################################################
