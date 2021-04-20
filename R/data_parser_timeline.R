@@ -66,9 +66,20 @@ data_parser_timeline <- function(results_data){
   if(length(h) != 0){
     tmp <- setDT(dt)[, strsplit(attachments.media_keys,
                                              ',', perl=TRUE)]
+    cat("Is it running up to here?\n")
+
     tmp <- as.data.frame(t(tmp))
+
+    cat("Is it running up to here?\n")
+
     tmp <- data.table::setnames(tmp, paste0('attachments.media_keys_', 1:ncol(tmp)))[]
+
+    cat("Is it running up to here?\n")
+
     dt <- cbind(dt,tmp)
+
+    cat("Is it running up to here?\n")
+
   }
 
   h <- grep("geo\\.place_id", names(dt), value = T)
@@ -79,7 +90,6 @@ data_parser_timeline <- function(results_data){
     dt <- cbind(dt,tmp)
   }
 
-  cat("Is it running up to here?\n")
   ##################################################################
   # ---- includes part ---- #
   ##################################################################
