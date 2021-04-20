@@ -166,7 +166,6 @@ get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL
         rate_limit_reset <- as.POSIXct(as.numeric(response[["headers"]][["x-rate-limit-reset"]]), origin = "1970-01-01")
 
         ret <- data_parser_timeline(results_list)
-        cat("Something went wrong!\n")
         pg_token <- ret[[2]]
         ret <- ret[[1]]
 
