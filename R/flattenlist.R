@@ -1,15 +1,16 @@
 # ' @title: RTweetV2 Function flattenlist
-##################################################################################################
-# Twitter API V2 Endpoint Functions
-##################################################################################################
-# Description:
-# This Script contains the functions necessary to query the new twitter API v2 endpoints.
-# See https://developer.twitter.com/en/docs for more info about the API
-##################################################################################################
-# Content
-##################################################################################################
-# Helper Functions
-##################################################################################################
+
+#' This function is a sub function helping make a list flat.
+#' @param x list with elements from the twitter API
+
+#' @return a list
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' }
+
+
 # flatten list of lists where lists are nested within and of unequal length!
 flattenlist <- function(x){
   morelists <- sapply(x, function(xprime) class(xprime)[1]=="list")

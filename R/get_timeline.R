@@ -1,16 +1,28 @@
 # ' @title: RTweetV2 Function getting a Timeline by one Users ID
-##################################################################################################
-# Twitter API V2 Endpoint Functions
-##################################################################################################
-# Description:
-# This Script contains the functions necessary to query the new twitter API v2 endpoints.
-# See https://developer.twitter.com/en/docs for more info about the API
-##################################################################################################
-# Content
+
+#' This function allows you to collect up to the last 3200 tweets from a users timeline from twitter with the users user_id
+#' @param token string of the bearer token from your personal twitter API access
+#' @param user_id string of the users id from the user of which you would like to get the timeline from
+#' @param tweet_fields string which defaults to ALL (no other argument accepted at the moment)
+#' @param user_fields string which defaults to ALL (no other argument accepted at the moment)
+#' @param expansions string which defaults to ALL (no other argument accepted at the moment)
+#' @param place_fields string which defaults to ALL (no other argument accepted at the moment)
+#' @param poll_fields string which defaults to NONE (no other argument accepted at the moment)
+#' @param JSON boolean which defaults to FALSE (no other argument accepted at the moment)
+#' @param n integer representing the last n tweets to get from the timeline (maximum is 3200 and default is 100)
+
+#' @return a data frame
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' users <- get_timelines_v2(token=bearer_token, user_id = "2244994945", n = 100)
+#' }
+
 ##################################################################################################
 # Get Timelines of Users by ID (only ID Works at the moment)
 ##################################################################################################
-get_timelines_v2 <- function(token = NA, user_id = "783214", tweet_fields = "ALL", user_fields = "ALL",
+get_timelines_v2 <- function(token = NA, user_id = "", tweet_fields = "ALL", user_fields = "ALL",
                              expansions = "ALL", place_fields = "ALL", poll_fields = "NONE", n = 100, JSON = FALSE)
 {
   # required packages:

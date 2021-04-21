@@ -1,12 +1,31 @@
 # ' @title: RTweetV2 Function collecting tweets through teh academic trac search track
-##################################################################################################
-# Twitter API V2 Endpoint Functions
-##################################################################################################
-# Description:
-# This Script contains the functions necessary to query the new twitter API v2 endpoints.
-# See https://developer.twitter.com/en/docs for more info about the API
-##################################################################################################
-# Content
+
+#' This function allows you to collect tweets with the academic track with a query using the rulse put in place by twitter (see: https://developer.twitter.com/en/docs/twitter-api/v1/rules-and-filtering/search-operators)
+#' @param token string of the bearer token from your personal twitter API access
+#' @param user_id string of the users id from the user of which you would like to get the timeline from
+#' @param tweet_fields string which defaults to ALL (no other argument accepted at the moment)
+#' @param user_fields string which defaults to ALL (no other argument accepted at the moment)
+#' @param since_id character containing the lower bound status id to start looking for tweets (default is NA)
+#' @param until_id character containing the upper bound status id to start looking for tweets (default is NA)
+#' @param start_time character containing the start time for the search (defaults to NA; style is "yyyy-mm-ddThh:mm:ssZ")
+#' @param end_time character containing the end time for the search (defaults to NA; style is "yyyy-mm-ddThh:mm:ssZ")
+#' @param api_wait integer specifying how long the function should wait for the API to answer (defaults to 12 seconds)
+#' @param expansions string which defaults to ALL (no other argument accepted at the moment)
+#' @param place_fields string which defaults to ALL (no other argument accepted at the moment)
+#' @param media_fields string which defaults to ALL (no other argument accepted at the moment)
+#' @param poll_fields string which defaults to NONE (no other argument accepted at the moment)
+#' @param n integer specifying the maximum number of tweets the function should retun (defaults to NA)
+#' @param JSON boolean which defaults to FALSE
+#' @param storage_path character string specifying the path and file name to write the json file to
+
+#' @return a data frame
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' users <- full_archive_search(token=bearer_token, query = "Twitter OR #TwitterAPI", start_time = "2020-01-01T00:00:01Z" end_time = "2020-01-02T00:00:01Z", n = 1000)
+#' }
+
 ##################################################################################################
 # Get Timelines of Users by ID (only ID Works at the moment)
 ##################################################################################################

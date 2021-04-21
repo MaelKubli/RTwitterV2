@@ -1,12 +1,22 @@
 # ' @title: RTweetV2 Function getting Users Information from Twitters v2 API
-##################################################################################################
-# Twitter API V2 Endpoint Functions
-##################################################################################################
-# Description:
-# This Script contains the functions necessary to query the new twitter API v2 endpoints.
-# See https://developer.twitter.com/en/docs for more info about the API
-##################################################################################################
-# Content
+
+#' This function allows you to collect data about one ore more users on twitter
+#' @param token string of the bearer token from your personal twitter API access
+#' @param user_ids string of twitter users ids (multiple ids are separated with a comma)
+#' @param user_names string of twitter user names (multiple user names are separated with a comma)
+#' @param user_fields string which defaults to ALL (no other argument accepted at the moment)
+#' @param tweet_fields string which defaults to author_id (no other argument accepted at the moment)
+#' @param expansions string which defaults to ALL (no other arguent accepted at the moment)
+#' @param JSON boolean which defaults to FALSE (no other argument accepted at the moment)
+
+#' @return a data frame
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' users <- get_users_v2(token=bearer_token, user_names = "Twitter,TiwtterDev")
+#' }
+
 ##################################################################################################
 # Get Users by ID and User_Name
 ##################################################################################################

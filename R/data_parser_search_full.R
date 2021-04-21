@@ -1,24 +1,14 @@
 # ' @title: RTweetV2 Function data parser full archive search
-##################################################################################################
-# Twitter API V2 Endpoint Functions
-##################################################################################################
-# Description:
-# This Script contains the functions necessary to query the new twitter API v2 endpoints.
-# See https://developer.twitter.com/en/docs for more info about the API
-##################################################################################################
-# Content
-##################################################################################################
-# Dependencies
-##################################################################################################
-require(httr)
-require(httpuv)
-require(RCurl)
-require(ROAuth)
-require(jsonlite)
-require(data.table)
-require(purrr)
-require(lubridate)
-require(readr)
+
+#' This function is a sub function parsing the data returned from the API
+#' @param results_data list with results from the API call
+
+#' @return data frame
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' }
 ##################################################################################################
 # Parse full_archive_search
 ##################################################################################################
