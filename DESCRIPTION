@@ -16,16 +16,6 @@ Depends:
 	purrr,
 	lubridate,
 	readr
-Imports:
-	data.table,
-	httr,
-	httpuv,
-	RCurl,
-	ROAuth,
-	jsonlite,
-	purrr,
-	lubridate,
-	readr
 Encoding: UTF-8
 LazyData: true
 URL: https://wwww.github.com/MaelKubli/RTwitterV2
