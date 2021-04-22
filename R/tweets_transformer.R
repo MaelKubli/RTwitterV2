@@ -23,17 +23,6 @@
 # transform_tweets_data
 tweets_transformer <- function(dt){
 
-  # required packages:
-  suppressPackageStartupMessages(require(httr))
-  suppressPackageStartupMessages(require(rjson))
-  suppressPackageStartupMessages(require(jsonlite))
-  suppressPackageStartupMessages(require(data.table))
-  suppressPackageStartupMessages(require(httpuv))
-  suppressPackageStartupMessages(require(RCurl))
-  suppressPackageStartupMessages(require(ROAuth))
-  suppressPackageStartupMessages(require(purrr))
-  suppressPackageStartupMessages(require(lubridate))
-  suppressPackageStartupMessages(require(readr))
 
   # Remove cols we have no use for
   h <- grep("\\.start$|\\.end$", names(dt), value = T)

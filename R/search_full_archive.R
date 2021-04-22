@@ -44,16 +44,6 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
                                 expansions = "ALL", place_fields = "ALL", media_fields = "ALL", poll_fields = "NONE",
                                 n = NA, JSON = FALSE, storage_path = "archive_searched_tweets.json"){
 
-  # required packages:
-  suppressPackageStartupMessages(require(httr))
-  suppressPackageStartupMessages(require(httpuv))
-  suppressPackageStartupMessages(require(RCurl))
-  suppressPackageStartupMessages(require(ROAuth))
-  suppressPackageStartupMessages(require(jsonlite))
-  suppressPackageStartupMessages(require(data.table))
-  suppressPackageStartupMessages(require(purrr))
-  suppressPackageStartupMessages(require(lubridate))
-  suppressPackageStartupMessages(require(readr))
 
   # Check if Bearer Token is set:
   if(is.na(token) | nchar(token) != 112){

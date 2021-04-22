@@ -25,16 +25,6 @@
 ##################################################################################################
 data_parser_search_full <- function(results_data){
 
-  # required packages:
-  suppressPackageStartupMessages(require(httr))
-  suppressPackageStartupMessages(require(httpuv))
-  suppressPackageStartupMessages(require(RCurl))
-  suppressPackageStartupMessages(require(ROAuth))
-  suppressPackageStartupMessages(require(jsonlite))
-  suppressPackageStartupMessages(require(data.table))
-  suppressPackageStartupMessages(require(purrr))
-  suppressPackageStartupMessages(require(lubridate))
-  suppressPackageStartupMessages(require(readr))
 
   data_list <- results_data$data
   for(i in 1:length(data_list)){

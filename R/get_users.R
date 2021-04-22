@@ -31,17 +31,6 @@
 # Get Users by ID and User_Name
 ##################################################################################################
 get_user_v2 <- function(token = NA, user_ids = NA, user_names = NA, user_fields = "ALL", tweet_fields = "author_id", expansions = "ALL", JSON = FALSE){
-  # required packages:
-  suppressPackageStartupMessages(require(httr))
-  suppressPackageStartupMessages(require(rjson))
-  suppressPackageStartupMessages(require(jsonlite))
-  suppressPackageStartupMessages(require(data.table))
-  suppressPackageStartupMessages(require(httpuv))
-  suppressPackageStartupMessages(require(RCurl))
-  suppressPackageStartupMessages(require(ROAuth))
-  suppressPackageStartupMessages(require(purrr))
-  suppressPackageStartupMessages(require(lubridate))
-  suppressPackageStartupMessages(require(readr))
 
   # Check if Bearer Token is set:
   if(is.na(token) | nchar(token) != 112){

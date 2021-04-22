@@ -25,17 +25,6 @@
 ##################################################################################################
 data_parser_users <- function(results_data){
 
-  # required packages:
-  suppressPackageStartupMessages(require(httr))
-  suppressPackageStartupMessages(require(rjson))
-  suppressPackageStartupMessages(require(jsonlite))
-  suppressPackageStartupMessages(require(data.table))
-  suppressPackageStartupMessages(require(httpuv))
-  suppressPackageStartupMessages(require(RCurl))
-  suppressPackageStartupMessages(require(ROAuth))
-  suppressPackageStartupMessages(require(purrr))
-  suppressPackageStartupMessages(require(lubridate))
-  suppressPackageStartupMessages(require(readr))
 
   du <- lapply(results_data,flattenlist)
   du <- purrr::map(du, as.data.table)

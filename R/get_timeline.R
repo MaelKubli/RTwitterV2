@@ -35,16 +35,7 @@
 get_timelines_v2 <- function(token = NA, user_id = "", tweet_fields = "ALL", user_fields = "ALL",
                              expansions = "ALL", place_fields = "ALL", poll_fields = "NONE", n = 100, JSON = FALSE)
 {
-  # required packages:
-  suppressPackageStartupMessages(require(httr))
-  suppressPackageStartupMessages(require(httpuv))
-  suppressPackageStartupMessages(require(RCurl))
-  suppressPackageStartupMessages(require(ROAuth))
-  suppressPackageStartupMessages(require(jsonlite))
-  suppressPackageStartupMessages(require(data.table))
-  suppressPackageStartupMessages(require(purrr))
-  suppressPackageStartupMessages(require(lubridate))
-  suppressPackageStartupMessages(require(readr))
+
 
   # Check if Bearer Token is set:
   if(is.na(token) | nchar(token) != 112){
