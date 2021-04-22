@@ -1,24 +1,25 @@
 # ' @title: RTweetV2 Function handling data as JSON
-##################################################################################################
-# Twitter API V2 Endpoint Functions
-##################################################################################################
-# Description:
-# This Script contains the functions necessary to query the new twitter API v2 endpoints.
-# See https://developer.twitter.com/en/docs for more info about the API
-##################################################################################################
-# Content
-##################################################################################################
-# Dependencies
-##################################################################################################
-require(httr)
-require(httpuv)
-require(RCurl)
-require(ROAuth)
-require(jsonlite)
-require(data.table)
-require(purrr)
-require(lubridate)
-require(readr)
+
+#' This function is a sub function parsing the data returned from the API
+#' @param data_twitter list with results from the API call
+
+#' @return list wirtable as a JSON file
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' }
+
+#' @import httr
+#' @import httpuv
+#' @import RCurl
+#' @import ROAuth
+#' @import jsonlite
+#' @import data.table
+#' @import purrr
+#' @import lubridate
+#' @import readr
+
 ##################################################################################################
 # Helper Functions
 ##################################################################################################

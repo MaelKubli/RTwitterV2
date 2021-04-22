@@ -17,6 +17,16 @@
 #' users <- get_users_v2(token=bearer_token, user_names = "Twitter,TiwtterDev")
 #' }
 
+#' @import httr
+#' @import httpuv
+#' @import RCurl
+#' @import ROAuth
+#' @import jsonlite
+#' @import data.table
+#' @import purrr
+#' @import lubridate
+#' @import readr
+
 ##################################################################################################
 # Get Users by ID and User_Name
 ##################################################################################################

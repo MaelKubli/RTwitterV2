@@ -10,6 +10,16 @@
 #' \dontrun{
 #' }
 
+#' @import httr
+#' @import httpuv
+#' @import RCurl
+#' @import ROAuth
+#' @import jsonlite
+#' @import data.table
+#' @import purrr
+#' @import lubridate
+#' @import readr
+
 ##################################################################################################
 # Parse get_users_v2 Data
 ##################################################################################################

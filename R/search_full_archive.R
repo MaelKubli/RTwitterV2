@@ -26,6 +26,16 @@
 #' users <- full_archive_search(token=bearer_token, query = "Twitter OR #TwitterAPI", start_time = "2020-01-01T00:00:01Z" end_time = "2020-01-02T00:00:01Z", n = 1000)
 #' }
 
+#' @import httr
+#' @import httpuv
+#' @import RCurl
+#' @import ROAuth
+#' @import jsonlite
+#' @import data.table
+#' @import purrr
+#' @import lubridate
+#' @import readr
+
 ##################################################################################################
 # Get Timelines of Users by ID (only ID Works at the moment)
 ##################################################################################################

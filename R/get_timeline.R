@@ -19,6 +19,16 @@
 #' users <- get_timelines_v2(token=bearer_token, user_id = "2244994945", n = 100)
 #' }
 
+#' @import httr
+#' @import httpuv
+#' @import RCurl
+#' @import ROAuth
+#' @import jsonlite
+#' @import data.table
+#' @import purrr
+#' @import lubridate
+#' @import readr
+
 ##################################################################################################
 # Get Timelines of Users by ID (only ID Works at the moment)
 ##################################################################################################

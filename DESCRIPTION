@@ -6,6 +6,16 @@ Author: Maël Kubli
 Maintainer: Maël Kubli <kubli@ipz.uzh.ch>
 Description: This repository contains all the necessary functions to use some pats of Twitters v2 API with the academic track. 
 License: MIT
+Depends:
+    R (>= 3.6.0),
+	httr,
+	httpuv,
+	RCurl,
+	ROAuth,
+	jsonlite,
+	purrr,
+	lubridate,
+	readr
 Imports:
 	data.table,
 	httr,
@@ -18,4 +28,6 @@ Imports:
 	readr
 Encoding: UTF-8
 LazyData: true
+URL: https://wwww.github.com/MaelKubli/RTwitterV2
+Language: en-US
 RoxygenNote: 7.1.1

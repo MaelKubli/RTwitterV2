@@ -10,7 +10,6 @@
 #' \dontrun{
 #' }
 
-
 # flatten list of lists where lists are nested within and of unequal length!
 flattenlist <- function(x){
   morelists <- sapply(x, function(xprime) class(xprime)[1]=="list")

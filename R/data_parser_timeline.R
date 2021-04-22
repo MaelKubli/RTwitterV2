@@ -10,6 +10,16 @@
 #' \dontrun{
 #' }
 
+#' @import httr
+#' @import httpuv
+#' @import RCurl
+#' @import ROAuth
+#' @import jsonlite
+#' @import data.table
+#' @import purrr
+#' @import lubridate
+#' @import readr
+
 ##################################################################################################
 # Parse Get_Timeline Data
 ##################################################################################################
