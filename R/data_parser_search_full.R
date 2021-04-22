@@ -10,15 +10,7 @@
 #' \dontrun{
 #' }
 
-#' @import httr
-#' @import httpuv
-#' @import RCurl
-#' @import ROAuth
-#' @import jsonlite
-#' @import data.table
-#' @import purrr
-#' @import lubridate
-#' @import readr
+#' @import httr httpuv RCurl ROAuth jsonlite data.table purrr lubridate readr
 
 ##################################################################################################
 # Parse full_archive_search
