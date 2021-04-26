@@ -9,7 +9,7 @@ library(RTwitterV2)
 ```
 
 ## Demo
-Getting Tweets from a specific users timeline via `get_timelines_v2()`. This function gets the last n tweets from a users timeline (max n = 3200).
+Getting Tweets from a specific users timeline via `get_timelines_v2()`. This function gets the last n tweets from a user's timeline (max n = 3200).
 
 ```r
 Bearer_Token <- "" #Insert your Bearer Token
@@ -90,5 +90,19 @@ for(i in 2:length(days)){
   }
   cat(paste0(lower," to ", upper, " has been colleted!\n"))  
 }
+
+```
+
+With the archive search it is not only possible to search for tweets with certain keywords but also to collect the entire timeline of a user without the restriction of the last 3200 tweets. 
+For example if you would like to collect all tweets from the @TwitterDev account:
+
+```R
+Bearer_Token <- "" #Insert your Beaer Token
+
+query_content <- "from:TwitterDev"
+
+test <- full_archive_search(token = Bearer_Token, 
+                            search_query = query_content, 
+                            n = 20000)
 
 ```
