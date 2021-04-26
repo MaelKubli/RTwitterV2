@@ -73,7 +73,7 @@ for(i in 2:length(days)){
   lower <- paste0(days[i-1],"T00:00:01Z")
   upper <- paste0(days[i],"T00:00:01Z")
   
-  tmp <- .full_archive_search(token = Bearer_Token, 
+  tmp <- full_archive_search(token = Bearer_Token, 
                               search_query = query, 
                               start_time = lower, 
                               end_time = upper, 
@@ -81,14 +81,14 @@ for(i in 2:length(days)){
   
   if(is.null(df)==T){
     df <- tmp
-    setwd(parent_path)
+    # setwd(parent_path) # set working directory (if necessary)
     write_csv(df, "abst21_Jan-Mar.csv")
   } else {
     df <- dplyr::bind_rows(df,tmp)
-    setwd(parent_path)
+    # setwd(parent_path) # set working directory (if necessary)
     write_csv(df, "abst21_Jan-Mar.csv")
   }
-  cat(paste0(lower," to ",upper, "has been colleted!\n"))  
+  cat(paste0(lower," to ", upper, " has been colleted!\n"))  
 }
 
 ```
