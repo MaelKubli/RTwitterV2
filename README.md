@@ -77,19 +77,20 @@ for(i in 2:length(days)){
                               search_query = query, 
                               start_time = lower, 
                               end_time = upper, 
-                              n = 250000)
+                              n = 250000,
+                              n_try = 10)
   
   if(is.null(df)==T){
     df <- tmp
     # setwd(parent_path) # set working directory (if necessary)
-    write_csv(df, "abst21_Jan-Mar.csv")
   } else {
     df <- dplyr::bind_rows(df,tmp)
     # setwd(parent_path) # set working directory (if necessary)
-    write_csv(df, "abst21_Jan-Mar.csv")
   }
   cat(paste0(lower," to ", upper, " has been colleted!\n"))  
 }
+
+write_csv(df, "abst21_Jan-Mar.csv")
 
 ```
 

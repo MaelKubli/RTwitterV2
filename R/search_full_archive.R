@@ -1,6 +1,6 @@
-# ' @title: RTweetV2 Function collecting tweets through teh academic trac search track
+# ' @title: RTweetV2 Function collecting tweets with the academic search track
 
-#' This function allows you to collect tweets with the academic track with a query using the rulse put in place by twitter (see: https://developer.twitter.com/en/docs/twitter-api/v1/rules-and-filtering/search-operators)
+#' This function allows you to collect tweets with the academic track with a query using the rules put in place by twitter (see: https://developer.twitter.com/en/docs/twitter-api/v1/rules-and-filtering/search-operators)
 #' @param token string of the bearer token from your personal twitter API access
 #' @param user_id string of the users id from the user of which you would like to get the timeline from
 #' @param tweet_fields string which defaults to ALL (no other argument accepted at the moment)
@@ -14,9 +14,10 @@
 #' @param place_fields string which defaults to ALL (no other argument accepted at the moment)
 #' @param media_fields string which defaults to ALL (no other argument accepted at the moment)
 #' @param poll_fields string which defaults to NONE (no other argument accepted at the moment)
-#' @param n integer specifying the maximum number of tweets the function should retun (defaults to NA)
+#' @param n integer specifying the maximum number of tweets the function should return (defaults to NA)
 #' @param JSON boolean which defaults to FALSE
 #' @param storage_path character string specifying the path and file name to write the json file to
+#' @param n_try integer specifying number of retries in case of 503 error
 
 #' @return a data frame
 #' @export
@@ -34,7 +35,7 @@
 full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "ALL", user_fields = "ALL",
                                 since_id = NA, until_id = NA, start_time = NA, end_time = NA, api_wait = 12,
                                 expansions = "ALL", place_fields = "ALL", media_fields = "ALL", poll_fields = "NONE",
-                                n = NA, JSON = FALSE, storage_path = "archive_searched_tweets.json"){
+                                n = NA, JSON = FALSE, storage_path = "archive_searched_tweets.json", n_try = 10){
 
 
   # Check if Bearer Token is set:
@@ -203,15 +204,16 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
       } else {
         response <- httr::GET(url = 'https://api.twitter.com/2/tweets/search/all', httr::add_headers(.headers=headers), query = params, timeout(api_wait))
         Sys.sleep(.1)
+        ww <- 1
         if(response[["status_code"]] == 503){
           Sys.sleep(1)
           response <- httr::GET(url = 'https://api.twitter.com/2/tweets/search/all', httr::add_headers(.headers=headers), query = params, timeout(api_wait))
           ww <- 1
-          while(response[["status_code"]] != 200){
+          while(response[["status_code"]] != 200 & ww <= n_try){
             Sys.sleep(ww)
             ww <- ww + 1
-            cat("Something went wrong!\n")
-            cat(paste0(content(response)$errors[[1]]$message,"\nError: ",content(response)$status),"\n")
+            cat("Service Unavailable\n")
+            cat(paste0(content(response)$errors[[1]]$message," Error: ",content(response)$status),"\n")
             response <- httr::GET(url = 'https://api.twitter.com/2/tweets/search/all', httr::add_headers(.headers=headers), query = params, timeout(api_wait))
           }
         } else if (response[["status_code"]] != 200){
@@ -221,84 +223,107 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
 
         }
 
-        rate_limit_remaining <- response[["headers"]][["x-rate-limit-remaining"]]
-        rate_limit_reset <- as.POSIXct(as.numeric(response[["headers"]][["x-rate-limit-reset"]]), origin = "1970-01-01")
-
-        if(JSON == FALSE){
-          # return Data
-          results_list <- jsonlite::fromJSON(httr::content(response, "text"), simplifyDataFrame =  F)
-          count_results <- results_list[["meta"]][["result_count"]]
-          ret <- data_parser_search_full(results_data = results_list)
-          data_twitter <- ret[[1]]
-          pg_token <- ret[[2]]
-
-          #bind data
-          if(counter == 1){
-            data <- data_twitter
-            counter <- 2
-
-            results_count <- nrow(data)
-            date_check_l <- max(data$created_at)
-          } else {
-            data <- dplyr::bind_rows(data,data_twitter)
-            results_count <- nrow(data)
-            date_check_l <- max(data$created_at)
-          }
-
-
+        if(ww > n_try){
+          cat(paste0("Data collection stopped after ", n_try-1, " unsuccessful tries to call the API.\nEach time the API  responded with: Error 503, Service Unavailable\n"))
+          return(data)
         } else {
-          data_twitter <- jsonlite::fromJSON(httr::content(response, "text"))
+          rate_limit_remaining <- response[["headers"]][["x-rate-limit-remaining"]]
+          rate_limit_reset <- as.POSIXct(as.numeric(response[["headers"]][["x-rate-limit-reset"]]), origin = "1970-01-01")
 
-          if(length(data_twitter[["meta"]]) == 4){
-            pg_token <- data_twitter[["meta"]][["next_token"]]
-          } else if (length(data_twitter[["meta"]]) == 5){
-            pg_token <- data_twitter[["meta"]][["next_token"]]
+          if(JSON == FALSE){
+            # return Data
+            results_list <- jsonlite::fromJSON(httr::content(response, "text"), simplifyDataFrame =  F)
+            count_results <- results_list[["meta"]][["result_count"]]
+            ret <- data_parser_search_full(results_data = results_list)
+            data_twitter <- ret[[1]]
+            pg_token <- ret[[2]]
+
+            #bind data
+            if(counter == 1){
+              data <- data_twitter
+              counter <- 2
+
+              results_count <- nrow(data)
+              date_check_l <- max(data$created_at)
+            } else {
+              data <- dplyr::bind_rows(data,data_twitter)
+              results_count <- nrow(data)
+              date_check_l <- max(data$created_at)
+            }
+
+
           } else {
-            pg_token <- "no_next_token"
+            data_twitter <- jsonlite::fromJSON(httr::content(response, "text"))
+
+            if(length(data_twitter[["meta"]]) == 4){
+              pg_token <- data_twitter[["meta"]][["next_token"]]
+            } else if (length(data_twitter[["meta"]]) == 5){
+              pg_token <- data_twitter[["meta"]][["next_token"]]
+            } else {
+              pg_token <- "no_next_token"
+            }
+
+            ret <- data_json(data_twitter = data_twitter)
+            pg_token <- ret[[2]]
+
+            #bind data
+            if(counter == 1){
+              data <- data_twitter
+              counter <- 2
+
+              results_count <- nrow(data)
+              date_check <- max(data$created_at)
+            } else {
+              data <- dplyr::bind_rows(data,data_twitter)
+              results_count <- nrow(data)
+              date_check <- max(data$created_at)
+            }
+
+
+            if(!file.exists(storage_path) & pg_token != "no_next_token"){
+              data_j <- jsonlite::toJSON(ret[[1]], pretty = T)
+              data_j <- gsub('.{0,2}$', ',', data_j)
+              write_file(data_j, file = storage_path, append = F)
+            } else if(file.exists(storage_path) & pg_token != "no_next_token") {
+              data_j <- jsonlite::toJSON(ret[[1]], pretty = T)
+              data_j <- gsub('.{0,2}$', ',', data_j)
+              data_j <- gsub('^.{0,2}', '', data_j)
+              write_file(data_j, file = storage_path, append = T)
+            } else if(!file.exists(storage_path) & pg_toke == "no_next_token") {
+              data_j <- jsonlite::toJSON(ret[[1]], pretty = T)
+              write_file(data_j, file = storage_path, append = F)
+            } else if(file.exists(storage_path) & pg_token == "no_next_token") {
+              data_j <- jsonlite::toJSON(ret[[1]], pretty = T)
+              data_j <- gsub('^.{0,2}', '', data_j)
+              write_file(data_j, file = storage_path, append = T)
+            } else {
+
+            }
+
           }
-
-          ret <- .data_json(data_twitter = data_twitter)
-          pg_token <- ret[[2]]
-
-          #bind data
-          if(counter == 1){
-            data <- data_twitter
-            counter <- 2
-
-            results_count <- nrow(data)
-            date_check <- max(data$created_at)
-          } else {
-            data <- dplyr::bind_rows(data,data_twitter)
-            results_count <- nrow(data)
-            date_check <- max(data$created_at)
-          }
-
-
-          if(!file.exists(storage_path) & pg_token != "no_next_token"){
-            data_j <- jsonlite::toJSON(ret[[1]], pretty = T)
-            data_j <- gsub('.{0,2}$', ',', data_j)
-            write_file(data_j, file = storage_path, append = F)
-          } else if(file.exists(storage_path) & pg_token != "no_next_token") {
-            data_j <- jsonlite::toJSON(ret[[1]], pretty = T)
-            data_j <- gsub('.{0,2}$', ',', data_j)
-            data_j <- gsub('^.{0,2}', '', data_j)
-            write_file(data_j, file = storage_path, append = T)
-          } else if(!file.exists(storage_path) & pg_toke == "no_next_token") {
-            data_j <- jsonlite::toJSON(ret[[1]], pretty = T)
-            write_file(data_j, file = storage_path, append = F)
-          } else if(file.exists(storage_path) & pg_token == "no_next_token") {
-            data_j <- jsonlite::toJSON(ret[[1]], pretty = T)
-            data_j <- gsub('^.{0,2}', '', data_j)
-            write_file(data_j, file = storage_path, append = T)
-          } else {
-
-          }
-
         }
       }
     }
   } else {
-    response <- httr::GET(url = 'https://api.twitter.com/2/tweets/search/all', httr::add_headers(.headers=headers), query = params, timeout(10))
+    response <- httr::GET(url = 'https://api.twitter.com/2/tweets/search/all', httr::add_headers(.headers=headers), query = params, timeout(api_wait))
+    Sys.sleep(.1)
+    ww <- 1
+    if(response[["status_code"]] == 503){
+      Sys.sleep(1)
+      response <- httr::GET(url = 'https://api.twitter.com/2/tweets/search/all', httr::add_headers(.headers=headers), query = params, timeout(api_wait))
+      while(response[["status_code"]] != 200 & ww <= n_try){
+        Sys.sleep(ww)
+        ww <- ww + 1
+        cat("Something went wrong!\n")
+        cat(paste0(content(response)$errors[[1]]$message,"\nError: ",content(response)$status),"\n")
+        response <- httr::GET(url = 'https://api.twitter.com/2/tweets/search/all', httr::add_headers(.headers=headers), query = params, timeout(api_wait))
+      }
+    } else if (response[["status_code"]] != 200){
+      cat("Something went wrong!\n")
+      stop(paste0(content(response)$errors[[1]]$message,"\nError: ",content(response)$status),"\n")
+    } else {
+
+    }
 
     rate_limit<- response[["headers"]][["x-rate-limit-limit"]]
     rate_limit_remaining <- response[["headers"]][["x-rate-limit-remaining"]]

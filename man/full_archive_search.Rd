@@ -2,7 +2,7 @@
 % Please edit documentation in R/search_full_archive.R
 \name{full_archive_search}
 \alias{full_archive_search}
-\title{This function allows you to collect tweets with the academic track with a query using the rulse put in place by twitter (see: https://developer.twitter.com/en/docs/twitter-api/v1/rules-and-filtering/search-operators)}
+\title{This function allows you to collect tweets with the academic track with a query using the rules put in place by twitter (see: https://developer.twitter.com/en/docs/twitter-api/v1/rules-and-filtering/search-operators)}
 \usage{
 full_archive_search(
   token = NA,
@@ -20,7 +20,8 @@ full_archive_search(
   poll_fields = "NONE",
   n = NA,
   JSON = FALSE,
-  storage_path = "archive_searched_tweets.json"
+  storage_path = "archive_searched_tweets.json",
+  n_try = 10
 )
 }
 \arguments{
@@ -48,11 +49,13 @@ full_archive_search(
 
 \item{poll_fields}{string which defaults to NONE (no other argument accepted at the moment)}
 
-\item{n}{integer specifying the maximum number of tweets the function should retun (defaults to NA)}
+\item{n}{integer specifying the maximum number of tweets the function should return (defaults to NA)}
 
 \item{JSON}{boolean which defaults to FALSE}
 
 \item{storage_path}{character string specifying the path and file name to write the json file to}
+
+\item{n_try}{integer specifying number of retries in case of 503 error}
 
 \item{user_id}{string of the users id from the user of which you would like to get the timeline from}
 }
@@ -60,7 +63,7 @@ full_archive_search(
 a data frame
 }
 \description{
-This function allows you to collect tweets with the academic track with a query using the rulse put in place by twitter (see: https://developer.twitter.com/en/docs/twitter-api/v1/rules-and-filtering/search-operators)
+This function allows you to collect tweets with the academic track with a query using the rules put in place by twitter (see: https://developer.twitter.com/en/docs/twitter-api/v1/rules-and-filtering/search-operators)
 }
 \examples{
 \dontrun{
