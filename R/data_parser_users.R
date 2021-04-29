@@ -6,12 +6,9 @@
 #' @return data frame
 #' @export
 #'
-#' @examples
-#' \dontrun{
-#' }
 
-#' @import httr httpuv RCurl ROAuth jsonlite data.table purrr lubridate readr
-
+#' @import httr httpuv RCurl ROAuth data.table readr
+#' @importFrom purrr map
 ##################################################################################################
 # Parse get_users_v2 Data
 ##################################################################################################

@@ -6,11 +6,8 @@
 #' @return a data frame or data table
 #' @export
 #'
-#' @examples
-#' \dontrun{
-#' }
-
-#' @import httr httpuv RCurl ROAuth jsonlite data.table purrr lubridate readr
+#'
+#' @importFrom stats na.omit
 
 # transform_tweets_data
 tweets_transformer <- function(dt){

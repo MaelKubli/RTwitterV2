@@ -27,6 +27,8 @@ full_archive_search(
 \arguments{
 \item{token}{string of the bearer token from your personal twitter API access}
 
+\item{search_query}{string representing the query to search tweets with}
+
 \item{tweet_fields}{string which defaults to ALL (no other argument accepted at the moment)}
 
 \item{user_fields}{string which defaults to ALL (no other argument accepted at the moment)}
@@ -56,8 +58,6 @@ full_archive_search(
 \item{storage_path}{character string specifying the path and file name to write the json file to}
 
 \item{n_try}{integer specifying number of retries in case of 503 error}
-
-\item{user_id}{string of the users id from the user of which you would like to get the timeline from}
 }
 \value{
 a data frame

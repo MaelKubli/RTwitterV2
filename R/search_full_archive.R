@@ -2,7 +2,7 @@
 
 #' This function allows you to collect tweets with the academic track with a query using the rules put in place by twitter (see: https://developer.twitter.com/en/docs/twitter-api/v1/rules-and-filtering/search-operators)
 #' @param token string of the bearer token from your personal twitter API access
-#' @param user_id string of the users id from the user of which you would like to get the timeline from
+#' @param search_query string representing the query to search tweets with
 #' @param tweet_fields string which defaults to ALL (no other argument accepted at the moment)
 #' @param user_fields string which defaults to ALL (no other argument accepted at the moment)
 #' @param since_id character containing the lower bound status id to start looking for tweets (default is NA)
@@ -27,8 +27,11 @@
 #' users <- full_archive_search(token=bearer_token, query = "Twitter OR #TwitterAPI", start_time = "2020-01-01T00:00:01Z" end_time = "2020-01-02T00:00:01Z", n = 1000)
 #' }
 
-#' @import httr httpuv RCurl ROAuth jsonlite data.table purrr lubridate readr
-
+#' @import httr httpuv RCurl ROAuth data.table readr
+#' @importFrom stats na.omit
+#' @importFrom lubridate as_datetime
+#' @importFrom jsonlite fromJSON toJSON
+#' @importFrom dplyr bind_rows
 ##################################################################################################
 # Get Timelines of Users by ID (only ID Works at the moment)
 ##################################################################################################
@@ -289,7 +292,7 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
               data_j <- gsub('.{0,2}$', ',', data_j)
               data_j <- gsub('^.{0,2}', '', data_j)
               write_file(data_j, file = storage_path, append = T)
-            } else if(!file.exists(storage_path) & pg_toke == "no_next_token") {
+            } else if(!file.exists(storage_path) & pg_token == "no_next_token") {
               data_j <- jsonlite::toJSON(ret[[1]], pretty = T)
               write_file(data_j, file = storage_path, append = F)
             } else if(file.exists(storage_path) & pg_token == "no_next_token") {

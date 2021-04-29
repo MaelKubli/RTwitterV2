@@ -6,9 +6,7 @@
 #' @return a list
 #' @export
 #'
-#' @examples
-#' \dontrun{
-#' }
+#' @importFrom stats na.omit
 
 # flatten list of lists where lists are nested within and of unequal length!
 flattenlist <- function(x){

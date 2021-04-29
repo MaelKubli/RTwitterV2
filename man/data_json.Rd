@@ -10,12 +10,8 @@ data_json(data_twitter = data)
 \item{data_twitter}{list with results from the API call}
 }
 \value{
-list wirtable as a JSON file
+list writable as a JSON file
 }
 \description{
 This function is a sub function parsing the data returned from the API
-}
-\examples{
-\dontrun{
-}
 }

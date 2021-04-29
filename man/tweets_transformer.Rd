@@ -15,7 +15,3 @@ a data frame or data table
 \description{
 This function is a sub function transforming many list type columns in the twitter data to a simple column with string of comma delimited entries
 }
-\examples{
-\dontrun{
-}
-}

@@ -1,22 +1,24 @@
 Type: Package
 Package: RTwitterV2
 Title: RTwitterV2 contains function making Twitters V2 API accessible
-Version: 0.1.0
+Version: 0.2.0
+Date: 2021-04-29
 Author: Maël Kubli
 Maintainer: Maël Kubli <kubli@ipz.uzh.ch>
 Description: This repository contains all the necessary functions to use some pats of Twitters v2 API with the academic track. 
-License: MIT
+License: MIT + file LICENSE
 Depends:
     R (>= 3.6.0)
-Import:
-	data.table
+Imports:
+	data.table,
+	dplyr,
 	httpuv,
-	RCurl,
-	ROAuth,
 	httr,
 	jsonlite,
-	purrr,
 	lubridate,
+	purrr,
+	RCurl,
+	ROAuth,
 	readr
 Encoding: UTF-8
 LazyData: true

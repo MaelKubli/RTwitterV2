@@ -17,7 +17,3 @@ a vector
 \description{
 This function is a sub function combining listed columns into a string for simpler handling in a data frame
 }
-\examples{
-\dontrun{
-}
-}

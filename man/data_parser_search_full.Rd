@@ -15,7 +15,3 @@ data frame
 \description{
 This function is a sub function parsing the data returned from the API
 }
-\examples{
-\dontrun{
-}
-}

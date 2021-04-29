@@ -3,14 +3,11 @@
 #' This function is a sub function parsing the data returned from the API
 #' @param data_twitter list with results from the API call
 
-#' @return list wirtable as a JSON file
+#' @return list writable as a JSON file
 #' @export
 #'
-#' @examples
-#' \dontrun{
-#' }
 
-#' @import httr httpuv RCurl ROAuth jsonlite data.table purrr lubridate readr
+#' @import httr httpuv RCurl ROAuth data.table readr
 
 ##################################################################################################
 # Helper Functions
@@ -86,7 +83,7 @@ data_json <- function(data_twitter = data){
 
     if(!is.null(keys) == T){
      if(length(keys) == 1){
-       tmp_j <- subset(dm, media_media_key == keys[1])
+       tmp_j <- subset(dm, `media_media_key` == keys[1])
        if(nrow(tmp_j) == 0){
          tmp_j <- data.frame(matrix(nrow = 1, ncol = 8))
          colnames(tmp_j) <- names(dm)
@@ -94,7 +91,7 @@ data_json <- function(data_twitter = data){
        dm_i[i,] <- tmp_j
      } else {
        for(j in 1:length(keys)){
-         tmp_j <- subset(dm, media_media_key == keys[j])
+         tmp_j <- subset(dm, `media_media_key` == keys[j])
          if(nrow(tmp_j) == 0){
            tmp_j <- data.frame(matrix(nrow = 1, ncol = 8))
            colnames(tmp_j) <- names(dm)

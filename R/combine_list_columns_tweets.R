@@ -7,9 +7,8 @@
 #' @return a vector
 #' @export
 #'
-#' @examples
-#' \dontrun{
-#' }
+#'
+#' @importFrom stats na.omit
 
 # combine listed columns to one column
 combine_list_columns_tweets <- function(h, dt){

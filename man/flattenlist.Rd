@@ -15,7 +15,3 @@ a list
 \description{
 This function is a sub function helping make a list flat.
 }
-\examples{
-\dontrun{
-}
-}

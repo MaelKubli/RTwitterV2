@@ -17,8 +17,8 @@
 #' users <- get_users_v2(token=bearer_token, user_names = "Twitter,TiwtterDev")
 #' }
 
-#' @import httr httpuv RCurl ROAuth jsonlite data.table purrr lubridate readr
-
+#' @import httr httpuv RCurl ROAuth data.table readr
+#' @importFrom stats na.omit
 ##################################################################################################
 # Get Users by ID and User_Name
 ##################################################################################################
