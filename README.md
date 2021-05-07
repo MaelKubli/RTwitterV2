@@ -107,3 +107,27 @@ test <- full_archive_search(token = Bearer_Token,
                             n = 20000)
 
 ```
+
+If you want to search Tweets by location only this can be done best with the function full_archive_search_locations(). 
+Be aware that the filtering operators for locations will not match on ReTweets, since Retweet's places are attached to the original Tweet. 
+It will also not match on places attached to the original Tweet of a Quote Tweet.
+Additionaly you need to keep in mind that only small percentage of Tweets have geo-tagged information associated with them. 
+Thus, relying only on geo-tagged Tweets alone might introduce some bias in your dataset. 
+You can still add a normal query to the function with the search_query Operator, which will be combined with the location search. 
+
+```R
+Bearer_Token <- "" #Insert your Beaer Token
+
+#place_country search
+tmp <- full_archive_search_locations(token = Bearer_Token, n = 1000, api_wait = 15, n_try = 10, JSON = FALSE,
+                                     country = "US")
+
+#point_radius search
+tmp <- full_archive_search_locations(token = Bearer_Token, n = 1000, api_wait = 15, n_try = 10, JSON = FALSE,
+                                     longitude = 8.550000 , latitude = 47.3666700, radius = 10)
+
+#bounding_box search
+tmp <- full_archive_search_locations(token = Bearer_Token, n = 1000, api_wait = 15, n_try = 10, JSON = FALSE,
+                                     bounding_box = c(8.500000, 47.36600, 8.590000, 47.36700))
+
+```
