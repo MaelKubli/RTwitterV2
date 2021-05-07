@@ -1,33 +1,31 @@
-# ' @title: RTweetV2 Function collecting tweets with the academic search track
+# ' @title: RTweetV2 Function collecting tweets with the academic search track with geo_location
 
 #' This function allows you to collect tweets with the academic track with a query using the rules put in place by twitter (see: https://developer.twitter.com/en/docs/twitter-api/v1/rules-and-filtering/search-operators)
 #' @param token string of the bearer token from your personal twitter API access
 #' @param search_query string representing the query to search tweets with
-#' @param tweet_fields string which defaults to ALL (no other argument accepted at the moment)
-#' @param user_fields string which defaults to ALL (no other argument accepted at the moment)
 #' @param since_id character containing the lower bound status id to start looking for tweets (default is NA)
 #' @param until_id character containing the upper bound status id to start looking for tweets (default is NA)
 #' @param start_time character containing the start time for the search (defaults to NA; style is "yyyy-mm-ddThh:mm:ssZ")
 #' @param end_time character containing the end time for the search (defaults to NA; style is "yyyy-mm-ddThh:mm:ssZ")
 #' @param api_wait integer specifying how long the function should wait for the API to answer (defaults to 12 seconds)
-#' @param expansions string which defaults to ALL (no other argument accepted at the moment)
-#' @param place_fields string which defaults to ALL (no other argument accepted at the moment)
-#' @param media_fields string which defaults to ALL (no other argument accepted at the moment)
-#' @param poll_fields string which defaults to NONE (no other argument accepted at the moment)
 #' @param n integer specifying the maximum number of tweets the function should return (defaults to NA)
 #' @param JSON boolean which defaults to FALSE
 #' @param storage_path character string specifying the path and file name to write the json file to
 #' @param n_try integer specifying number of retries in case of 503 error
+#' @param latitude latitude coordinate of point radius
+#' @param longitude longitude coordinate of point radius
+#' @param bounding_box vector with the elements west_long, south_lat, east_long, north_lat in this order with a max height and width of 40 km
+#' @param radius seize of search radius in kilometers (max: 40 km)
+#' @param country single ISO alpha-2 character code of one country
 
 #' @return a data frame
 #' @export
 #'
 #' @examples
 #' \dontrun{
-#' users <- full_archive_search(token=bearer_token, query = "Twitter OR #TwitterAPI",
-#'                              start_time = "2020-01-01T00:00:01Z",
-#'                              end_time = "2020-01-02T00:00:01Z",
-#'                              n = 1000)
+#' users <- full_archive_search_locations(token = Bearer_Token, n = 1000,
+#'                                        n_try = 10, JSON = FALSE, api_wait = 15,
+#'                                        bounding_box = c(8.500000, 47.36600, 8.590000, 47.36700)
 #' }
 
 #' @import httr httpuv RCurl ROAuth data.table readr
@@ -35,26 +33,87 @@
 #' @importFrom lubridate as_datetime
 #' @importFrom jsonlite fromJSON toJSON
 #' @importFrom dplyr bind_rows
+#' @importFrom geosphere distGeo
 ##################################################################################################
 # Get Timelines of Users by ID (only ID Works at the moment)
 ##################################################################################################
-full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "ALL", user_fields = "ALL",
-                                since_id = NA, until_id = NA, start_time = NA, end_time = NA, api_wait = 12,
-                                expansions = "ALL", place_fields = "ALL", media_fields = "ALL", poll_fields = "NONE",
-                                n = NA, JSON = FALSE, storage_path = "archive_searched_tweets.json", n_try = 10){
+full_archive_search_locations <- function(token = NA, search_query = NA, latitude = NA, longitude = NA, radius = NA, bounding_box = NA,
+                                          since_id = NA, until_id = NA, start_time = NA, end_time = NA, api_wait = 12, country = NA,
+                                          n = NA, JSON = FALSE, storage_path = "archive_searched_tweets.json", n_try = 10){
+
+  tweet_fields = "ALL"
+  user_fields = "ALL"
+  expansions = "ALL"
+  place_fields = "ALL"
+  media_fields = "ALL"
+  poll_fields = "NONE"
 
 
   # Check if Bearer Token is set:
   if(is.na(token) | nchar(token) != 112){
     stop("Please add the Bearer Token of your projects dashboard!\n")
   }
-  # Check if at least one User ID is set:
-  if(is.na(search_query) | !is.character(search_query)){
-    stop("Please add at least one Search Term to the Search Query!\n")
+
+  if(is.na(n) && is.na(since_id) && is.na(start_time)){
+    stop("Pleaes add at least one of the following criterias:\n  - n\n  - since_id\n  - start_time")
   }
 
-  if(is.na(n) & is.na(since_id) & is.na(start_time)){
-    stop("Pleaes add at least one of the following criterias:\n")
+  if(is.na(latitude) && is.na(longitude) && is.na(radius) && is.na(country) && is.na(bounding_box)){
+    stop("Add at least one search criteria for geolocation!\n  - country\n  - longitude, latiitude and radius")
+  }
+
+
+  if(!is.na(longitude) && !is.na(latitude)){
+    if(is.na(radius)){
+      stop("Please add a radius!\n")
+    }
+    if(radius > 40){
+      stop("Radius is geater than 40 km!\n")
+    }
+
+    location_query <- paste0("point_radius:[",longitude," ",latitude," ", radius,"km]")
+  } else if (!is.na(bounding_box[1])) {
+    if(!is.na(radius)){
+      warning("Radius not needed for bounding box search!\n")
+    }
+    if(bounding_box[1] >= 180 & bounding_box[1] <= -180){
+      stop("west_long is not within -180 and 180")
+    }
+
+    if(bounding_box[3] >= 180 & bounding_box[3] <= -180){
+      stop("east_long is not within -180 and 180")
+    }
+
+    if(bounding_box[2] >= 90 & bounding_box[3] <= -90){
+      stop("south_lat is not within -90 and 90")
+    }
+
+    if(bounding_box[4] >= 90 & bounding_box[4] <= -90){
+      stop("north_lat is not within -90 and 90")
+    }
+
+    dist_w <- geosphere::distGeo(matrix(c(bounding_box[1], bounding_box[2]), ncol = 2),
+                                 matrix(c(bounding_box[3], bounding_box[2]), ncol = 2))
+
+    dist_h <- geosphere::distGeo(matrix(c(bounding_box[1], bounding_box[2]), ncol = 2),
+                                 matrix(c(bounding_box[1], bounding_box[4]), ncol = 2))
+
+    if(dist_w > 40000 | dist_h > 40000){
+      stop("Width and height of the bounding box must be less than 40 km")
+    }
+
+
+    location_query <- paste0("bounding_box:[",bounding_box[1]," ",bounding_box[2]," ", bounding_box[3], " ", bounding_box[4],"]")
+  } else if (!is.na(country)) {
+    location_query <- paste0("place_country:",country,"")
+  } else {
+
+  }
+
+  if(!is.na(search_query)){
+    search_query <- paste0(search_query, " ", location_query)
+  } else {
+    search_query <- location_query
   }
 
   # mkdir if files should be stored as JSON

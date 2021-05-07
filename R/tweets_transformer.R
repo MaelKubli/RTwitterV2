@@ -199,6 +199,14 @@ tweets_transformer <- function(dt){
     dt <- dt[ , !names(dt) %in% h]
   }
 
+  # entities cashtags
+  h <- grep("entities\\.cashtags\\.tag|entities\\.cashtags\\d+\\.tag", names(dt), value = T)
+  if(length(h) != 0){
+    dt$cashtags <- combine_list_columns_tweets(h=h,dt=dt)
+    dt$cashtags <- as.character(dt$cashtags)
+    dt <- dt[ , !names(dt) %in% h]
+  }
+
   #display_url
   h <- grep("entities\\.urls\\.display_url|entities\\.urls\\d+\\.display_url", names(dt), value = T)
   if(length(h) != 0){
