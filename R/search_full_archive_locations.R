@@ -299,9 +299,14 @@ full_archive_search_locations <- function(token = NA, search_query = NA, latitud
             # return Data
             results_list <- jsonlite::fromJSON(httr::content(response, "text"), simplifyDataFrame =  F)
             count_results <- results_list[["meta"]][["result_count"]]
-            ret <- data_parser_search_full(results_data = results_list)
-            data_twitter <- ret[[1]]
-            pg_token <- ret[[2]]
+            if(count_results != 0){
+              ret <- data_parser_search_full(results_data = results_list)
+              data_twitter <- ret[[1]]
+              pg_token <- ret[[2]]
+            } else {
+              data_twitter <- data.frame()
+              pg_token <- "no_next_token"
+            }
 
             #bind data
             if(counter == 1){
