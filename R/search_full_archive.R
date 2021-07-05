@@ -137,7 +137,7 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
     params$max_results <- NULL
     n_max <- 1000000
   } else {
-    params$max_results <- 500
+    params$max_results <- 100
     n_max <- n
   }
 
@@ -172,13 +172,13 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
   headers <- c(`Authorization` = sprintf('Bearer %s', token))
 
   # loop through API output
-  if(is.na(n) | n > 500){
+  if(is.na(n) | n > 100){
 
     # basic values for query
     get_results <- TRUE
-    count_results <- 500
+    count_results <- 100
     results_count <- 0
-    params$max_results <- 500
+    params$max_results <- 100
     date_check_l <- start_time_check
     date_check_u <- end_time_check
     counter <- 1
