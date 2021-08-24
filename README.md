@@ -131,3 +131,20 @@ tmp <- full_archive_search_locations(token = Bearer_Token, n = 1000, api_wait = 
                                      bounding_box = c(8.500000, 47.36600, 8.590000, 47.36700))
 
 ```
+
+Filtering: 
+
+```R
+library(RTwitterV2)
+
+#To exclude retweets just add the filter -is:retweet to the query itself:
+query <- "#Biden OR #Trump -is:retweet"
+
+lower <- "2020-06-01T00:00:01Z"
+upper <- "2021-06-01T00:00:01Z"
+
+tmp <- full_archive_search(token = Bearer_Token, search_query = query, n = 2500,
+start_time=lower, end_time=upper, JSON = FALSE)
+
+unique(tmp$is_retweet)
+```
