@@ -45,7 +45,7 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
 
 
   # Check if Bearer Token is set:
-  if(is.na(token) | nchar(token) != 112){
+  if(is.na(token) | nchar(token) < 90){
     stop("Please add the Bearer Token of your projects dashboard!\n")
   }
   # Check if at least one User ID is set:

@@ -25,7 +25,7 @@
 get_user_v2 <- function(token = NA, user_ids = NA, user_names = NA, user_fields = "ALL", tweet_fields = "author_id", expansions = "ALL", JSON = FALSE){
 
   # Check if Bearer Token is set:
-  if(is.na(token) | nchar(token) != 112){
+  if(is.na(token) | nchar(token) < 90){
     stop("Please add the Bearer Token of your projects dashboard!\nget_timelines_v2(token = 'token')\n")
   }
   # Check if at least one User ID is set:

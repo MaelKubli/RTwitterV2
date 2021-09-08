@@ -50,7 +50,7 @@ full_archive_search_locations <- function(token = NA, search_query = NA, latitud
 
 
   # Check if Bearer Token is set:
-  if(is.na(token) | nchar(token) != 112){
+  if(is.na(token) | nchar(token) < 90){
     stop("Please add the Bearer Token of your projects dashboard!\n")
   }
 
