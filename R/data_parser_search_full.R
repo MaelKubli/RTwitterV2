@@ -203,26 +203,30 @@ data_parser_search_full <- function(results_data){
     h <- grep("geo.place_id_", names(dt), value = T)
     g <- grep("\\_i", names(dp), value = T)
     f <- gsub("\\_i", "", g)
-    for(i in 1:length(h)){
-      dt <- data.table::merge.data.table(dt,
-                             dp,
-                             by.x = h[i],
-                             by.y = "places_id",
-                             all.x = TRUE)
-      for(j in 1:length(g)){
-        if(i == 1){
-          epr_s <- paste0("dt$",f[j]," <- dt$",g[j])
-          eval(parse(text=epr_s))
-          epr_s <- paste0("dt$",g[j]," <- NULL")
-          eval(parse(text=epr_s))
-        } else {
-          epr_s <- paste0("dt$",f[j]," <- ifelse(is.na(dt$",g[j],") == T, dt$",f[j],",  paste0(dt$",f[j],",',',dt$",g[j],"))")
-          eval(parse(text=epr_s))
-          epr_s <- paste0("dt$",g[j]," <- NULL")
-          eval(parse(text=epr_s))
-        }
-      }
+    if(length(h) == 0) {
 
+    } else {
+      for(i in 1:length(h)){
+        dt <- data.table::merge.data.table(dt,
+                                           dp,
+                                           by.x = h[i],
+                                           by.y = "places_id",
+                                           all.x = TRUE)
+        for(j in 1:length(g)){
+          if(i == 1){
+            epr_s <- paste0("dt$",f[j]," <- dt$",g[j])
+            eval(parse(text=epr_s))
+            epr_s <- paste0("dt$",g[j]," <- NULL")
+            eval(parse(text=epr_s))
+          } else {
+            epr_s <- paste0("dt$",f[j]," <- ifelse(is.na(dt$",g[j],") == T, dt$",f[j],",  paste0(dt$",f[j],",',',dt$",g[j],"))")
+            eval(parse(text=epr_s))
+            epr_s <- paste0("dt$",g[j]," <- NULL")
+            eval(parse(text=epr_s))
+          }
+        }
+
+      }
     }
     dt <- as.data.frame(dt)
     dt <- dt[ , !names(dt) %in% c(h,"geo.place_id")]
@@ -372,9 +376,13 @@ data_parser_search_full <- function(results_data){
     dt$is_quote <- ifelse(grepl("quoted", dt$referenced_tweets_type) == T, 1, 0 )
   }
 
+  if(length(h) != 0){
+    dt$referenced_tweets_id <- NULL
+    dt$referenced_tweets_type <- NULL
+  }
 
-  dt$referenced_tweets_id <- NULL
-  dt$referenced_tweets_type <- NULL
+  #dt$referenced_tweets_id <- NULL
+  #dt$referenced_tweets_type <- NULL
 
   dt <- as.data.frame(dt)
   dt <- dt[ , order(names(dt))]
