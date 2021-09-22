@@ -17,6 +17,8 @@ data_parser_search_full <- function(results_data){
 
 
   data_list <- results_data$data
+
+  if(is.list(data_list) == F){data_list <- list(data_list)}
   for(i in 1:length(data_list)){
     data_list[[i]]$attachments$media_keys <- gsub("\\,\\s","\\,", toString(na.omit(data_list[[i]]$attachments$media_keys)))
   }

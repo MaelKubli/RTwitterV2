@@ -343,8 +343,7 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
 
     if(JSON == FALSE){
       # return Data
-      results_list <- content(response, "text", encoding = "UTF-8")
-      results_list <- jsonlite::fromJSON(results_list)
+      results_list <- jsonlite::fromJSON(httr::content(response, "text"), simplifyDataFrame =  F)
       ret <- data_parser_search_full(results_data = results_list)
       data <- ret[[1]]
     } else {
