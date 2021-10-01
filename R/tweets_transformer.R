@@ -73,6 +73,14 @@ tweets_transformer <- function(dt){
     dt <- dt[ , !names(dt) %in% h]
   }
 
+  # mentions_id
+  h <- grep("entities\\.mentions\\d+\\.id|entities\\.mentions\\.id", names(dt), value = T)
+  if(length(h) != 0){
+    dt$mentions_id <- combine_list_columns_tweets(h=h,dt=dt)
+    dt$mentions_id <- as.character(dt$mentions_id)
+    dt <- dt[ , !names(dt) %in% h]
+  }
+
   #entities probability
   h <- grep("entities\\.annotations\\.probability|entities\\.annotations\\d+\\.probability", names(dt), value = T)
   if(length(h) != 0){
