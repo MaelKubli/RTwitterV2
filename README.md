@@ -24,6 +24,20 @@ Bearer_Token <- "" #Insert your Bearer Token
 test <- get_user_v2(token = Bearer_Token, user_ids = "959432550400831488,62777265,14273050")
 ```
 
+Stream Tweets (Sampled Stream Only)
+```r
+Bearer_Token <- "" #Insert your Bearer Token
+
+sampled_stream(token = Bearer_Token,
+               timeout = 300,
+               backfill = 1,
+               file_name = "test_pkg_001.json")
+               
+path <- file("test_pkg_001.json")
+tdf <- parse_sampled_stream(path = path)
+```
+
+
 Getting Tweets from a Query with a set timeframe (Academic Track Required!)
 
 ```r

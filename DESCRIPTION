@@ -1,14 +1,14 @@
 Type: Package
 Package: RTwitterV2
 Title: RTwitterV2 contains function making Twitters V2 API accessible
-Version: 0.2.4
-Date: 2021-12-20
+Version: 0.2.5
+Date: 2022-06-28
 Author: Maël Kubli
 Maintainer: Maël Kubli <kubli@ipz.uzh.ch>
 Description: This repository contains all the necessary functions to use some pats of Twitters v2 API with the academic track. 
 License: MIT + file LICENSE
 Depends:
-    R (>= 3.6.0)
+    R (>= 4.0.0)
 Imports:
 	data.table,
 	dplyr,
@@ -20,9 +20,14 @@ Imports:
 	RCurl,
 	ROAuth,
 	readr,
-	geosphere
+	geosphere,
+	curl,
+	purrr,
+	progress (>= 1.2.2),
+    	rlang (>= 0.4.10),
+	withr (>= 2.5.0)
 Encoding: UTF-8
 LazyData: true
 URL: https://wwww.github.com/MaelKubli/RTwitterV2
 Language: en-US
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0

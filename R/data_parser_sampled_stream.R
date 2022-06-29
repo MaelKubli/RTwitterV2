@@ -1,4 +1,4 @@
-# ' @title: RTweetV2 Function data parser full archive search
+# ' @title: RTweetV2 Function data parser sampled stream
 
 #' This function is a sub function parsing the data returned from the API
 #' @param results_data list with results from the API call
@@ -9,23 +9,32 @@
 
 #' @import httr httpuv RCurl ROAuth data.table readr
 #' @importFrom purrr map
-
+#'
 ##################################################################################################
 # Parse full_archive_search
 ##################################################################################################
-data_parser_search_full <- function(results_data){
+data_parser_sampled_stream <- function(results_data){
 
 
-  data_list <- results_data$data
-
-  if(is.list(data_list) == F){data_list <- list(data_list)}
-  for(i in 1:length(data_list)){
-    data_list[[i]]$attachments$media_keys <- gsub("\\,\\s","\\,", toString(na.omit(data_list[[i]]$attachments$media_keys)))
+  for(i in 1:length(results_data)){
+    results_data[[i]]$data$attachments$media_keys <- gsub("\\,\\s","\\,", toString(na.omit(results_data[[i]]$data$attachments$media_keys)))
   }
-  dt <- lapply(data_list,flattenlist)
-  dt <- purrr::map(dt, as.data.table)
-  dt <- data.table::rbindlist(dt, fill = TRUE)
-  dt <- as.data.frame(dt)
+
+  dat <- lapply(results_data,flattenlist)
+  dat <- purrr::map(dat, as.data.table)
+  dat <- data.table::rbindlist(dat, fill = TRUE)
+  dat <- as.data.frame(dat)
+
+  checker <- grep("withheld", colnames(dat))
+  if(length(checker) != 0){
+    dat <- dat[, -grep("withheld", colnames(dat))]
+  }
+
+  dt <- dat
+
+  nms <- names(dt)
+  dt <- dt[ grepl("data.", nms)]
+  colnames(dt) <- gsub("data.", "",names(dt))
 
   dt <- tweets_transformer(dt)
   ## get columns names right:
@@ -59,22 +68,44 @@ data_parser_search_full <- function(results_data){
       dt <- cbind(dt,tmp)
     }
   }
-  ##################################################################
-  # ---- includes part ---- #
-  ##################################################################
-  includes_list <- results_data$includes
+
+
+
   ##################################################################
   # ----- users data ----- #
   ##################################################################
   ## users fields
-  user_list <- includes_list$users
-  du <- lapply(user_list,flattenlist)
-  du <- purrr::map(du, as.data.table)
-  du <- data.table::rbindlist(du, fill = TRUE)
-  du <- as.data.frame(du)
+  du <- dat
+
+  nms <- names(du)
+  du <- du[ grepl("includes.users", nms)]
+  colnames(du) <- gsub("includes.users", "",names(du))
+
   ## Remove cols we have no use for
   h <- grep("\\.start$|\\.end$", names(du), value = T)
   du <- du[ , !names(du) %in% h]
+
+  # Transform data   starting with .xxx and 1.xxx etc. as they are complementary to each other...
+  max_num <- unique(unlist(regmatches(names(du), gregexpr("^\\d{1,2}.|\\.",  names(du)))))
+  max_num <- gsub("\\.", "\\\\\\.", max_num)
+  for(n in 1:length(max_num)){
+    h <- grep(pattern = paste0("^", max_num[n]), names(du), value = T)
+    tmp <- du[ , names(du) %in% h]
+
+    tmp <- tmp[rowSums(is.na(tmp)) != ncol(tmp), ]
+    colnames(tmp) <- gsub(paste0("^",max_num[n]), "", names(tmp))
+    tmp <- as.data.table(tmp)
+
+    if(n == 1){
+      du_fin <- tmp
+    } else {
+      du_fin <- data.table::rbindlist(list(du_fin, tmp), fill = T)
+    }
+  }
+
+  du <- as.data.frame(du_fin)
+  rm(du_fin)
+
 
   ## entities description_hashtags
   h <- grep("entities\\.description\\.hashtags\\d+\\.tag|entities\\.description\\.hashtags\\.tag", names(du), value = T)
@@ -130,6 +161,7 @@ data_parser_search_full <- function(results_data){
   }
 
   ## get columns names right:
+  colnames(du) <- gsub("^\\.","",names(du))
   names(du)[names(du)=="username"] <- "screen_name"
   names(du)[names(du)=="name"] <- "name"
   names(du)[names(du)=="id"] <- "user_id"
@@ -147,11 +179,30 @@ data_parser_search_full <- function(results_data){
   ##################################################################
   # ----- media add-on for dt ----- #
   ##################################################################
-  media_list <- includes_list$media
-  if(is.null(media_list)==FALSE){
-    dm <- lapply(media_list,flattenlist)
-    dm <- purrr::map(dm, as.data.table)
-    dm <- data.table::rbindlist(dm, fill = TRUE)
+  dm <- stream_list_prep_i(dat = dat, string = "includes.media")
+
+  # Transform data   starting with .xxx and 1.xxx etc. as they are complementary to each other...
+  max_num <- unique(unlist(regmatches(names(dm), gregexpr("^\\d{1,2}.|\\.",  names(dm)))))
+  max_num <- gsub("\\.", "\\\\\\.", max_num)
+  for(n in 1:length(max_num)){
+    h <- grep(pattern = paste0("^", max_num[n]), names(dm), value = T)
+    tmp <- dm[ , names(dm) %in% h]
+
+    tmp <- tmp[rowSums(is.na(tmp)) != ncol(tmp), ]
+    colnames(tmp) <- gsub(paste0("^",max_num[n]), "", names(tmp))
+    tmp <- as.data.table(tmp)
+
+    if(n == 1){
+      dm_fin <- tmp
+    } else {
+      dm_fin <- data.table::rbindlist(list(dm_fin, tmp), fill = T)
+    }
+  }
+
+  dm <- as.data.frame(dm_fin)
+  rm(dm_fin)
+
+  if(nrow(dm)>=1){
     colnames_pre <- names(dm)
     colnames_pre <- paste0("media_",colnames_pre,"_i")
     colnames(dm) <- colnames_pre
@@ -189,14 +240,37 @@ data_parser_search_full <- function(results_data){
   ##################################################################
   # ----- places add-on for dt ----- #
   ##################################################################
-  places_list <- includes_list$places
-  if(is.null(places_list)==FALSE){
-    for(i in 1:length(places_list)){
-      places_list[[i]]$geo$bbox <- gsub("\\,\\s","\\,", toString(na.omit(places_list[[i]]$geo$bbox)))
+  dp <- stream_list_prep_i(dat = dat, string = "includes.places")
+
+  # Transform data   starting with .xxx and 1.xxx etc. as they are complementary to each other...
+  max_num <- unique(unlist(regmatches(names(dp), gregexpr("^\\d{1,2}.|\\.",  names(dp)))))
+  max_num <- gsub("\\.", "\\\\\\.", max_num)
+  for(n in 1:length(max_num)){
+    h <- grep(pattern = paste0("^", max_num[n]), names(dp), value = T)
+    tmp <- dp[ , names(dp) %in% h]
+
+    tmp <- tmp[rowSums(is.na(tmp)) != ncol(tmp), ]
+    colnames(tmp) <- gsub(paste0("^",max_num[n]), "", names(tmp))
+    tmp <- as.data.table(tmp)
+
+    if(n == 1){
+      dp_fin <- tmp
+    } else {
+      dp_fin <- data.table::rbindlist(list(dp_fin, tmp), fill = T)
     }
-    dp <- lapply(places_list,flattenlist)
-    dp <- purrr::map(dp, as.data.table)
-    dp <- data.table::rbindlist(dp, fill = TRUE)
+  }
+
+  dp <- as.data.frame(dp_fin)
+  rm(dp_fin)
+
+  if(nrow(dp)>=1){
+    h <- grep("geo\\.bbox\\d", names(dp), value = T)
+    if(length(h) != 0){
+      dp$geo_bbox <- combine_list_columns_tweets(h=h,dt=dp)
+      dp$geo_bbox <- as.character(dp$geo_bbox)
+      dp <- dp[ , !names(dp) %in% h]
+    }
+
     colnames_pre <- names(dp)
     colnames_pre <- paste0("places_",colnames_pre,"_i")
     colnames(dp) <- colnames_pre
@@ -236,18 +310,43 @@ data_parser_search_full <- function(results_data){
   ##################################################################
   # ----- quoted and retweeted tweets data ----- #
   ##################################################################
-  tweet_list <- includes_list$tweets
-  if(is.null(tweet_list)) {
+  drrqt <- stream_list_prep_i(dat = dat, string = "includes.tweets")
+
+  # Transform data   starting with .xxx and 1.xxx etc. as they are complementary to each other...
+  max_num <- unique(unlist(regmatches(names(drrqt), gregexpr("^\\d{1,2}.|^\\.",  names(drrqt)))))
+  max_num <- gsub("\\.", "\\\\\\.", max_num)
+  for(n in 1:length(max_num)){
+    h <- grep(pattern = paste0("^", max_num[n]), names(drrqt), value = T)
+    tmp <- drrqt[ , names(drrqt) %in% h]
+
+    tmp <- tmp[rowSums(is.na(tmp)) != ncol(tmp), ]
+    colnames(tmp) <- gsub(paste0("^",max_num[n]), "", names(tmp))
+    tmp <- as.data.table(tmp)
+
+    if(n == 1){
+      drrqt_fin <- tmp
+    } else {
+      drrqt_fin <- data.table::rbindlist(list(drrqt_fin, tmp), fill = T)
+    }
+  }
+
+  drrqt <- as.data.frame(drrqt_fin)
+  rm(drrqt_fin)
+
+  colnames(drrqt) <- gsub("^\\.","",names(drrqt))
+
+  if(nrow(drrqt) < 1) {
     location <- TRUE
   } else {
     location <- FALSE
-    for(i in 1:length(tweet_list)){
-      tweet_list[[i]]$attachments$media_keys <- gsub("\\,\\s","\\,", toString(na.omit(tweet_list[[i]]$attachments$media_keys)))
+
+    h <- grep("attachments\\.media_keys", names(drrqt), value = T)
+    h2 <- grep("attachments\\.media_keys\\d", names(drrqt), value = T)
+    if(length(h) != 0){
+      drrqt$attachments.media_keys <- combine_list_columns_tweets(h=h,dt=drrqt)
+      drrqt$attachments.media_keys <- as.character(drrqt$attachments.media_keys)
+      drrqt <- drrqt[ , !names(drrqt) %in% h2]
     }
-    drrqt <- lapply(tweet_list,flattenlist)
-    drrqt <- purrr::map(drrqt, as.data.table)
-    drrqt <- data.table::rbindlist(drrqt, fill = TRUE)
-    drrqt <- as.data.frame(drrqt)
 
     drrqt <- tweets_transformer(drrqt)
 
@@ -290,6 +389,7 @@ data_parser_search_full <- function(results_data){
       dq <- dqr[dqr$user_id %in% unique(d_tmp_q$quoted_user_id), ]
       colnames_new <- paste0("quoted_",names(dq))
       colnames(dq) <- colnames_new
+      dq <- unique(dq)
     }
 
 
@@ -325,6 +425,7 @@ data_parser_search_full <- function(results_data){
       dr <- dqr[dqr$user_id %in% unique(d_tmp_r$retweet_user_id), ]
       colnames_new <- paste0("retweet_",names(dr))
       colnames(dr) <- colnames_new
+      dr <- unique(dr)
     }
 
 
@@ -385,21 +486,6 @@ data_parser_search_full <- function(results_data){
 
   #dt$referenced_tweets_id <- NULL
   #dt$referenced_tweets_type <- NULL
-
-  dt <- as.data.frame(dt)
-  dt <- dt[ , order(names(dt))]
-  ##################################################################
-  # ----- meta pagination token ----- #
-  ##################################################################
-  next_token <- results_data$meta
-
-  if(length(next_token) == 4){
-    next_token <- next_token$next_token
-  } else if (length(next_token) == 5){
-    next_token <- next_token$next_token
-  } else {
-    next_token <- "no_next_token"
-  }
-  dt <- list(dt,next_token)
+  dt <- dt[!duplicated(dt[,c("status_id")]),]
   return(dt)
 }
