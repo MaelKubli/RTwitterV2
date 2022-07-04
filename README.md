@@ -2,7 +2,7 @@
 This Repository contains code to loop through timelines and the academic search API of the new Twitter API v2.
 
 
-## Istallation
+## Installation
 ```r
 devtools::install_github("MaelKubli/RTwitterV2")
 library(RTwitterV2)
