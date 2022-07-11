@@ -133,7 +133,7 @@ tweets_transformer <- function(dt){
   h <- grep("entities\\.urls\\.media_key|entities\\.urls\\d+\\.media_key", names(dt), value = T)
   if(length(h) != 0){
     dt$urls_media_key <- combine_list_columns_tweets(h=h,dt=dt)
-    dt$urls_media_key <- as.character(dt$urls_title)
+    dt$urls_media_key <- as.character(dt$urls_media_key)
     dt <- dt[ , !names(dt) %in% h]
   }
 
