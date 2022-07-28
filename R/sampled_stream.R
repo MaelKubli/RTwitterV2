@@ -148,7 +148,7 @@ download_from_stream <- function(stream, output, append = TRUE, timeout = 30, ve
       pb$tick(length(buf), tokens = list(n = n_seen))
     }
 
-    writeLines(lines$lines[is_tweet], output, useBytes = TRUE)
+    writeLines(lines$lines[is_tweet], output, useBytes = TRUE) # useBytes = TRUE results in lexical errors with R 4.1 and earlier ... iconv()
   }
 
   if (verbose) {

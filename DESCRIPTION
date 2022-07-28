@@ -8,7 +8,7 @@ Maintainer: Maël Kubli <kubli@ipz.uzh.ch>
 Description: This repository contains all the necessary functions to use some pats of Twitters v2 API with the academic track. 
 License: MIT + file LICENSE
 Depends:
-    R (>= 4.0.0)
+    R (>= 4.2.0)
 Imports:
 	data.table,
 	dplyr,

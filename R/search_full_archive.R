@@ -219,12 +219,12 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
             Sys.sleep(ww)
             ww <- ww + 1
             cat("Service Unavailable\n")
-            cat(paste0(content(response)$errors[[1]]$message," Error: ",content(response)$status),"\n")
+            cat(paste0(content(response)$errors[[1]]$message," Error: ",response$status_code),"\n")
             response <- httr::GET(url = 'https://api.twitter.com/2/tweets/search/all', httr::add_headers(.headers=headers), query = params, timeout(api_wait))
           }
         } else if (response[["status_code"]] != 200){
           cat("Something went wrong!\n")
-          stop(paste0(content(response)$errors[[1]]$message,"\nError: ",content(response)$status),"\n")
+          stop(paste0(content(response)$errors[[1]]$message,"\nError: ",response$status_code),"\n")
         } else {
 
         }
@@ -328,12 +328,12 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
         Sys.sleep(ww)
         ww <- ww + 1
         cat("Something went wrong!\n")
-        cat(paste0(content(response)$errors[[1]]$message,"\nError: ",content(response)$status),"\n")
+        cat(paste0(content(response)$errors[[1]]$message,"\nError: ",response$status_code),"\n")
         response <- httr::GET(url = 'https://api.twitter.com/2/tweets/search/all', httr::add_headers(.headers=headers), query = params, timeout(api_wait))
       }
     } else if (response[["status_code"]] != 200){
       cat("Something went wrong!\n")
-      stop(paste0(content(response)$errors[[1]]$message,"\nError: ",content(response)$status),"\n")
+      stop(paste0(content(response)$errors[[1]]$message,"\nError: ",response$status_code),"\n")
     } else {
 
     }
