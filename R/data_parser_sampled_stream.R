@@ -279,6 +279,10 @@ data_parser_sampled_stream <- function(results_data){
     h <- grep("geo.place_id_", names(dt), value = T)
     g <- grep("\\_i", names(dp), value = T)
     f <- gsub("\\_i", "", g)
+
+    # Distinct Place ID's
+    dp <- unique(dp['places_id'],)
+
     if(length(h) == 0) {
 
     } else {

@@ -1,7 +1,7 @@
 Type: Package
 Package: RTwitterV2
 Title: RTwitterV2 contains function making Twitters V2 API accessible
-Version: 0.2.6
+Version: 0.2.6.1
 Date: 2022-06-28
 Author: Maël Kubli
 Maintainer: Maël Kubli <kubli@ipz.uzh.ch>
@@ -30,4 +30,4 @@ Encoding: UTF-8
 LazyData: true
 URL: https://wwww.github.com/MaelKubli/RTwitterV2
 Language: en-US
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
