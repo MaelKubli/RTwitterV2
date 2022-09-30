@@ -20,9 +20,9 @@ data_parser_sampled_stream <- function(results_data){
     results_data[[i]]$data$attachments$media_keys <- gsub("\\,\\s","\\,", toString(na.omit(results_data[[i]]$data$attachments$media_keys)))
   }
 
-  dat <- lapply(results_data,flattenlist)
-  dat <- purrr::map(dat, as.data.table)
-  dat <- data.table::rbindlist(dat, fill = TRUE)
+  dat <- lapply(results_data,flattenlist)         #Slow (make faster)
+  dat <- purrr::map(dat, as.data.table)           #Slow (make faster)
+  dat <- data.table::rbindlist(dat, fill = TRUE)  #Slow (make faster)
   dat <- as.data.frame(dat)
 
   checker <- grep("withheld", colnames(dat))
@@ -174,6 +174,8 @@ data_parser_sampled_stream <- function(results_data){
   dqr <- du[!du$user_id %in% unique(dt$user_id), ]
   ## Select Data form User of Time-line only
   du <- du[du$user_id %in% unique(dt$user_id), ]
+  ## Distinct User ID's
+  du <- du[!duplicated(du$user_id), ]
   ## Add User Fields to Tweets
   dt <- data.table::merge.data.table(dt,du, by = c("user_id"))
   ##################################################################
@@ -281,7 +283,7 @@ data_parser_sampled_stream <- function(results_data){
     f <- gsub("\\_i", "", g)
 
     # Distinct Place ID's
-    dp <- unique(dp['places_id'],)
+    dp <- dp[!duplicated(dp$places_id), ]
 
     if(length(h) == 0) {
 
