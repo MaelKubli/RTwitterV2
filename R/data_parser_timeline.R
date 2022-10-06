@@ -141,6 +141,8 @@ data_parser_timeline <- function(results_data){
   dqr <- du[du$user_id != dt$user_id[1], ]
   ## Select Data form User of Time-line only
   du <- du[du$user_id == dt$user_id[1], ]
+  ## Distinct User ID's
+  du <- du[!duplicated(du$user_id), ]
   ## Add User Fields to Tweets
   dt <- data.table::merge.data.table(dt,du, by = c("user_id"))
   ##################################################################
@@ -204,6 +206,10 @@ data_parser_timeline <- function(results_data){
     h <- grep("geo.place_id_", names(dt), value = T)
     g <- grep("\\_i", names(dp), value = T)
     f <- gsub("\\_i", "", g)
+
+    # Distinct Place ID's
+    dp <- dp[!duplicated(dp$places_id), ]
+
     for(i in 1:length(h)){
       dt <- data.table::merge.data.table(dt,
                              dp,
