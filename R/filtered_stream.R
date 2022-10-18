@@ -1,4 +1,4 @@
-# ' @title: RTweetV2 Function collecting tweets from the 1 \% sampled stream
+# ' @title: RTweetV2 Function collecting tweets from the filterd stream
 
 #' This function allows you to collect tweets from the 1 \% sampled stream from twitter
 #' @param token string of the bearer token from your personal twitter API access
@@ -13,11 +13,11 @@
 #'
 #' @examples
 #' \dontrun{
-#' sampled_stream(Token = your_token, timeout = 60, backfill = 0,
+#' filtered_stream(Token = your_token, timeout = 60, backfill = 0,
 #'                file_name = "test_stream_2.json", verbose = T,
 #'                parse = F)
 #'
-#' tdf <- sampled_stream(Token = your_token, timeout = 60, backfill = 0,
+#' tdf <- filtered_stream(Token = your_token, timeout = 60, backfill = 0,
 #'                       verbose = T, parse = T)
 #' }
 #'
@@ -31,9 +31,9 @@
 #' @importFrom rlang has_name
 #' @importFrom withr defer
 ##################################################################################################
-# Get Tweets from the samples stream endpoint
+# Get Tweets from the filtered stream endpoint
 ##################################################################################################
-sampled_stream <- function(token = "",
+filtered_stream <- function(token = "",
                            timeout = 0,
                            backfill = 0,
                            file_name = NULL,
@@ -48,7 +48,7 @@ sampled_stream <- function(token = "",
 
   # Set filename
   if (is.null(file_name)) {
-    file_name <- tempfile(pattern = "sampled_stream_tweets", fileext = ".json")
+    file_name <- tempfile(pattern = "filtered_stream_tweets", fileext = ".json")
     inform(paste0("Writing to '", file_name, "'"))
   }
   output <- file(file_name)
@@ -80,7 +80,7 @@ sampled_stream <- function(token = "",
 
 
   #Build API call
-  url <- "https://api.twitter.com/2/tweets/sample/stream"
+  url <- "https://api.twitter.com/2/tweets/search/stream"
   url_fin <- httr::modify_url(url,
                               query = params)
 
@@ -93,7 +93,7 @@ sampled_stream <- function(token = "",
   ))
 
   if (parse) {
-    df <- parse_stream(file(file_name), filtered = F)
+    df <- parse_stream(file(file_name), filtered = T)
   } else {
     invisible(NULL)
   }
@@ -106,6 +106,3 @@ sampled_stream <- function(token = "",
 quiet_interrupt <- function(code) {
   tryCatch(code, interrupt = function(e) NULL)
 }
-
-
-
