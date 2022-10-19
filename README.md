@@ -162,3 +162,47 @@ start_time=lower, end_time=upper, JSON = FALSE)
 
 unique(tmp$is_retweet)
 ```
+
+Streaming Tweets (1 % Stream)
+```R
+library(RTwitterV2)
+
+setwd("YOUR DESIRED PATH")
+sampled_stream(Token = your_token, timeout = 60, backfill = 0,
+               file_name = "test_stream_1.json", verbose = T,
+               parse = F)
+               
+path <- file("test_stream_001.json")
+tdf <- parse_stream(path = path, filtered = F)
+               
+```
+
+Streaming Tweets (Filtered Stream)
+```R
+library(RTwitterV2)
+
+setwd("YOUR DESIRED PATH")
+
+# Add Filter Rule
+filtered_stream_add_rule(token = Bearer_Token,
+                         value = "#Trump",
+                         tag = "Test")
+
+# Get all Rules
+filtered_stream_get_rules(token = Bearer_Token)
+
+# Start a Filtered Stream
+filtered_stream(token = Bearer_Token,
+                timeout = 25,
+                backfill = 0,
+                file_name = "test_filtered_stream_001.json")
+
+# Remove Rule either by its id or its actual value
+filtered_stream_delete_rule(token = Bearer_Token,
+                            id = "",
+                            value = "")
+                            
+path <- file("test_filtered_stream_001.json")
+# Parse Stream 
+tdf <- parse_stream(path = path, filtered = T)
+```

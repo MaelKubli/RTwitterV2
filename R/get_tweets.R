@@ -119,45 +119,45 @@ get_tweets <- function(token = NA, tweet_ids = NA, tweet_fields = "ALL", user_fi
   headers <- c(`Authorization` = sprintf('Bearer %s', token))
 
   #
+  response <- httr::GET(url = paste0('https://api.twitter.com/2/tweets?ids=',tweet_ids), httr::add_headers(.headers=headers), query = params, timeout(api_wait))
+  Sys.sleep(.1)
+  ww <- 1
+  if(response[["status_code"]] == 503){
+    Sys.sleep(1)
     response <- httr::GET(url = paste0('https://api.twitter.com/2/tweets?ids=',tweet_ids), httr::add_headers(.headers=headers), query = params, timeout(api_wait))
-    Sys.sleep(.1)
-    ww <- 1
-    if(response[["status_code"]] == 503){
-      Sys.sleep(1)
-      response <- httr::GET(url = paste0('https://api.twitter.com/2/tweets?ids=',tweet_ids), httr::add_headers(.headers=headers), query = params, timeout(api_wait))
-      while(response[["status_code"]] != 200 & ww <= n_try){
-        Sys.sleep(ww)
-        ww <- ww + 1
-        cat("Something went wrong!\n")
-        cat(paste0(content(response)$errors[[1]]$message,"\nError: ",content(response)$status),"\n")
-        response <- httr::GET(url = paste0('https://api.twitter.com/2/tweets?ids=',tweet_ids), httr::add_headers(.headers=headers), query = params, timeout(api_wait))
-      }
-    } else if (response[["status_code"]] != 200){
+    while(response[["status_code"]] != 200 & ww <= n_try){
+      Sys.sleep(ww)
+      ww <- ww + 1
       cat("Something went wrong!\n")
-      stop(paste0(content(response)$errors[[1]]$message,"\nError: ",content(response)$status),"\n")
-    } else {
-
+      cat(paste0(content(response)$errors[[1]]$message,"\nError: ",content(response)$status),"\n")
+      response <- httr::GET(url = paste0('https://api.twitter.com/2/tweets?ids=',tweet_ids), httr::add_headers(.headers=headers), query = params, timeout(api_wait))
     }
+  } else if (response[["status_code"]] != 200){
+    cat("Something went wrong!\n")
+    stop(paste0(content(response)$errors[[1]]$message,"\nError: ",content(response)$status),"\n")
+  } else {
 
-    rate_limit<- response[["headers"]][["x-rate-limit-limit"]]
-    rate_limit_remaining <- response[["headers"]][["x-rate-limit-remaining"]]
-    rate_limit_reset <- as.POSIXct(as.numeric(response[["headers"]][["x-rate-limit-reset"]]), origin = "1970-01-01")
+  }
 
-    if(JSON == FALSE){
-      # return Data
-      results_list <- jsonlite::fromJSON(httr::content(response, "text"), simplifyDataFrame =  F)
-      ret <- data_parser_search_full(results_data = results_list)
-      data <- ret[[1]]
-    } else {
-      data <- jsonlite::fromJSON(httr::content(response, "text"))
-      ret <- data_json(data_twitter = data)
+  rate_limit<- response[["headers"]][["x-rate-limit-limit"]]
+  rate_limit_remaining <- response[["headers"]][["x-rate-limit-remaining"]]
+  rate_limit_reset <- as.POSIXct(as.numeric(response[["headers"]][["x-rate-limit-reset"]]), origin = "1970-01-01")
 
-      data_j <- jsonlite::toJSON(ret[[1]], pretty = T)
-      write_file(data_j, file = storage_path, append = F)
+  if(JSON == FALSE){
+   # return Data
+    results_list <- jsonlite::fromJSON(httr::content(response, "text"), simplifyDataFrame =  F)
+    ret <- data_parser_search_full(results_data = results_list)
+    data <- ret[[1]]
+  } else {
+    data <- jsonlite::fromJSON(httr::content(response, "text"))
+    ret <- data_json(data_twitter = data)
 
-      data <- ret[[1]]
+    data_j <- jsonlite::toJSON(ret[[1]], pretty = T)
+    write_file(data_j, file = storage_path, append = F)
 
-    }
+    data <- ret[[1]]
+
+  }
 
   return(data)
 }
