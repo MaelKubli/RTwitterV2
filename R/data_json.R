@@ -15,7 +15,8 @@
 ##################################################################################################
 # Save Data as JSON File (save each iteration and append new iteration to file)
 ##################################################################################################
-# Align with streaming layout for parser
+# Rewrite whole function to align it with how streamed data is written...
+# This would enable the use of one parser...
 data_json <- function(data_twitter = data){
 
   #--------------------------------
