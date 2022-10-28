@@ -20,9 +20,9 @@ data_parser_stream <- function(results_data, filtered){
     results_data[[i]]$data$attachments$media_keys <- gsub("\\,\\s","\\,", toString(na.omit(results_data[[i]]$data$attachments$media_keys)))
   }
 
-  dat <- lapply(results_data,flattenlist)         #Slow (make faster)
-  dat <- purrr::map(dat, as.data.table)           #Slow (make faster)
-  dat <- data.table::rbindlist(dat, fill = TRUE)  #Slow (make faster)
+  dat <- lapply(results_data,flattenlist)
+  dat <- purrr::map(dat, as.data.table)           # This could possible be faster with future's future::map()
+  dat <- data.table::rbindlist(dat, fill = TRUE)  # This is as fast as it gets with current Implementation
   dat <- as.data.frame(dat)
 
   checker <- grep("withheld", colnames(dat))
@@ -186,7 +186,7 @@ data_parser_stream <- function(results_data, filtered){
   ##################################################################
   drrqt <- stream_list_prep_i(dat = dat, string = "includes.tweets")
 
-  # Transform data   starting with .xxx and 1.xxx etc. as they are complementary to each other...
+  # Transform data  starting with .xxx and 1.xxx etc. as they are complementary to each other...
   max_num <- unique(unlist(regmatches(names(drrqt), gregexpr("^\\d{1,2}.|^\\.",  names(drrqt)))))
   max_num <- gsub("\\.", "\\\\\\.", max_num)
   for(n in 1:length(max_num)){
@@ -241,7 +241,7 @@ data_parser_stream <- function(results_data, filtered){
     # Nothing to do since it is a sampled stream result
   }
   ##################################################################
-  # ----- places data for tweet ----- #
+  # ----- places data for tweet or polls data from tweet ----- #
   ##################################################################
   #### Future Update ....
 

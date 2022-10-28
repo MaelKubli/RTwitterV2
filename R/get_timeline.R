@@ -112,9 +112,24 @@ get_timelines_v2 <- function(token = NA, user_id = "", tweet_fields = "ALL", use
 
     response <- httr::GET(url = paste0('https://api.twitter.com/2/users/',user_id,'/tweets'), httr::add_headers(.headers=headers),query = params)
     #print(response)
+    if(response[["status_code"]] == 200){
+      #cat("Status 200: Everything went fine!\n")
+    } else if(response[["status_code"]] == 400) {
+      cat("Something went wrong!\n")
+      cat(paste0(content(response)$errors[[1]]$message,"\n"))
+    } else if (response[["status_code"]] == 404){
+      cat("Something went wrong!\n")
+      cat(paste0(content(response)$errors[[1]]$message,"\n"))
+    } else {
+
+    }
 
     # return Data
     results_list <- jsonlite::fromJSON(httr::content(response, "text"), simplifyDataFrame =  F)
+    if(length(results_list) == 1){
+      message <- results_list[["errors"]][[1]][["detail"]]
+      stop(paste0(message,"!\n"))
+    }
     ret <- data_parser_timeline(results_list)
     data <- ret[[1]]
   } else {
@@ -166,6 +181,11 @@ get_timelines_v2 <- function(token = NA, user_id = "", tweet_fields = "ALL", use
         }
 
         results_list <- jsonlite::fromJSON(httr::content(response, "text"), simplifyDataFrame =  F)
+
+        if(length(results_list) == 1){
+          message <- results_list[["errors"]][[1]][["detail"]]
+          stop(paste0(message,"!\n"))
+        }
 
         rate_limit<- response[["headers"]][["x-rate-limit-limit"]]
         rate_limit_remaining <- response[["headers"]][["x-rate-limit-remaining"]]
