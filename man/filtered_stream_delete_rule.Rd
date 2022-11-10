@@ -2,7 +2,7 @@
 % Please edit documentation in R/filtered_stream_delete_rule.R
 \name{filtered_stream_delete_rule}
 \alias{filtered_stream_delete_rule}
-\title{This function allows you to collect tweets from the 1 \% sampled stream from twitter}
+\title{This function allows you remove a rule from the filtered stream from twitter}
 \usage{
 filtered_stream_delete_rule(token = "", value = "", id = "")
 }
@@ -17,7 +17,7 @@ filtered_stream_delete_rule(token = "", value = "", id = "")
 a list
 }
 \description{
-This function allows you to collect tweets from the 1 \% sampled stream from twitter
+This function allows you remove a rule from the filtered stream from twitter
 }
 \examples{
 \dontrun{

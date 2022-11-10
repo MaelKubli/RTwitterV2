@@ -20,7 +20,8 @@ internal_parser_media <- function(dm, dt){
   colnames(dm) <- colnames_pre
   names(dm)[names(dm) == 'media_media_key_i'] <- 'media_media_key'
 
-  dm <- dm[!duplicated(dm[ , c("media_media_key")]),]
+  #dm <- dm[!duplicated(dm[ , c("media_media_key")]),]
+  dm <- dm[!duplicated(dm$media_media_key), ]
 
   h <- grep("attachments.media_keys_", names(dt), value = T)
   g <- grep("\\_i", names(dm), value = T)

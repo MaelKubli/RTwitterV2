@@ -1,6 +1,6 @@
 # ' @title: RTweetV2 Function to delete a rule to the filtered stream endpoint
 
-#' This function allows you to collect tweets from the 1 \% sampled stream from twitter
+#' This function allows you remove a rule from the filtered stream from twitter
 #' @param token string of the bearer token from your personal twitter API access
 #' @param value string with rule value
 #' @param id string with rule tag

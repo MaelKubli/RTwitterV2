@@ -1,8 +1,8 @@
 Type: Package
 Package: RTwitterV2
 Title: RTwitterV2 contains function making Twitters V2 API accessible
-Version: 0.2.6.4
-Date: 2022-10-28
+Version: 0.2.6.5
+Date: 2022-11-10
 Author: Maël Kubli
 Maintainer: Maël Kubli <kubli@ipz.uzh.ch>
 Description: This repository contains all the necessary functions to use some pats of Twitters v2 API with the academic track. 

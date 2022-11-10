@@ -2,7 +2,7 @@
 % Please edit documentation in R/filtered_stream_retrieve_rule.R
 \name{filtered_stream_get_rules}
 \alias{filtered_stream_get_rules}
-\title{This function allows you to collect tweets from the 1 \% sampled stream from twitter}
+\title{This function allows you to get all rules you have in your filtered stream from twitter}
 \usage{
 filtered_stream_get_rules(token = "")
 }
@@ -13,7 +13,7 @@ filtered_stream_get_rules(token = "")
 a list
 }
 \description{
-This function allows you to collect tweets from the 1 \% sampled stream from twitter
+This function allows you to get all rules you have in your filtered stream from twitter
 }
 \examples{
 \dontrun{

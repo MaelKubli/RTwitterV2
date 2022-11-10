@@ -1,6 +1,6 @@
 # ' @title: RTweetV2 Function collecting tweets from the filterd stream
 
-#' This function allows you to collect tweets from the 1 \% sampled stream from twitter
+#' This function allows you to collect tweets from the filtered stream from twitter
 #' @param token string of the bearer token from your personal twitter API access
 #' @param timeout numeric scalar specifying amount of time, in seconds, to leave connection open while streaming/capturing tweets. By default, this is set to 30 seconds. The maximum duration for an open stream is set to 300 seconds to avoid large json files. .
 #' @param backfill By passing this parameter, you can request up to five (5) minutes worth of streaming data that you might have missed during a disconnection to be delivered to you upon re-connection. The back filled Tweets will automatically flow through the reconnected stream, with older Tweets generally being delivered before any newly matching Tweets. You must include a whole number between 1 and 5 as the value to this parameter. This feature will deliver duplicate Tweets, meaning that if you were disconnected for 90 seconds, and you requested two minutes of backfill, you will receive 30 seconds worth of duplicate Tweets. Due to this, you should make sure your system is tolerant of duplicate data. This feature is currently only available to those that have been approved for Academic Research access. To learn more about this access level, please visit our section on Academic Research.

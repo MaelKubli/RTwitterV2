@@ -2,7 +2,7 @@
 % Please edit documentation in R/filtered_stream.R
 \name{filtered_stream}
 \alias{filtered_stream}
-\title{This function allows you to collect tweets from the 1 \% sampled stream from twitter}
+\title{This function allows you to collect tweets from the filtered stream from twitter}
 \usage{
 filtered_stream(
   token = "",
@@ -30,7 +30,7 @@ filtered_stream(
 a data frame
 }
 \description{
-This function allows you to collect tweets from the 1 \% sampled stream from twitter
+This function allows you to collect tweets from the filtered stream from twitter
 }
 \examples{
 \dontrun{

@@ -1,6 +1,6 @@
 # ' @title: RTweetV2 Function to get all rules stored on your filtered stream endpoint
 
-#' This function allows you to collect tweets from the 1 \% sampled stream from twitter
+#' This function allows you to get all rules you have in your filtered stream from twitter
 #' @param token string of the bearer token from your personal twitter API access
 #'
 #
