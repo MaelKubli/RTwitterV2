@@ -52,9 +52,13 @@ internal_parser_rt_qt <- function(drrqt, dqr, dt){
 
     # ---- add quotes user fields to dt ---- #
     dq <- dqr[dqr$user_id %in% unique(d_tmp_q$quoted_user_id), ]
+    if("quoted_withheld.country_codes" %in% colnames(dq)){
+      dq$retweet_withheld.country_codes <- NULL
+    }
     colnames_new <- paste0("quoted_",names(dq))
     colnames(dq) <- colnames_new
     #dq <- unique(dq)
+    dq <- dq[!duplicated(dq$quoted_user_id), ]
   }
 
 
@@ -88,9 +92,13 @@ internal_parser_rt_qt <- function(drrqt, dqr, dt){
 
     # ---- add retweets user fields to dt ---- #
     dr <- dqr[dqr$user_id %in% unique(d_tmp_r$retweet_user_id), ]
+    if("retweet_withheld.country_codes" %in% colnames(dr)){
+      dr$retweet_withheld.country_codes <- NULL
+    }
     colnames_new <- paste0("retweet_",names(dr))
     colnames(dr) <- colnames_new
     #dr <- unique(dr)
+    dr <- dr[!duplicated(dr$retweet_user_id), ]
   }
 
 
