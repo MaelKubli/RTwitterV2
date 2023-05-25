@@ -211,7 +211,7 @@ full_archive_search <- function(token = NA, search_query = NA, tweet_fields = "A
         response <- httr::GET(url = 'https://api.twitter.com/2/tweets/search/all', httr::add_headers(.headers=headers), query = params, timeout(api_wait))
         Sys.sleep(.1)
         ww <- 1
-        if(response[["status_code"]] == 503){
+        if(response[["status_code"]] == 503 | response[["status_code"]] == 429){
           Sys.sleep(1)
           response <- httr::GET(url = 'https://api.twitter.com/2/tweets/search/all', httr::add_headers(.headers=headers), query = params, timeout(api_wait))
           ww <- 1
